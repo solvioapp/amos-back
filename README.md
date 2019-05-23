@@ -17,3 +17,5 @@ Firstly, copy the `.env.example` file to `.env` and update with the credentials 
 npm install
 node server.js
 ```
+
+##### [Meeting Notes](https://hackmd.io/jzQRquIjS4CU-_IICNIGcQ)
