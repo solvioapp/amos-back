@@ -4,6 +4,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+var bodyParser = require('body-parser')
 
 /**
  * Load Neode with the variables stored in `.env` and tell neode to
@@ -18,6 +19,10 @@ const neode = require('neode')
  */
 const app = express();
 
+// BodyParser
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 /**
  * Display home page with a list of Genres
  */
@@ -26,9 +31,12 @@ app.get('/', (req, res) => {
     res.end(JSON.stringify({ 'server': 'Amos' }, null, 3));
 });
 
+
+app.use('/api/v1/user', require('./routes/users')(neode))
+
 /**
  * Listen for requests on port 3000
  */
 app.listen(3000, function () {
-    console.log('app listening on http://localhost:3000'); // eslint-disable-line no-console
+    console.log('Amos:: listening on http://localhost:3000'); // eslint-disable-line no-console
 });

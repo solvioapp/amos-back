@@ -5,9 +5,9 @@
 Node : v12.2.0
 
 ## Tools Used
-- [Express](https://expressjs.com/)
-- [Neo4j](https://neo4j.com/)
-- [Neode](https://www.npmjs.com/package/neode)
+- Routing: [Express](https://expressjs.com/)
+- Database: [Neo4j](https://neo4j.com/)
+- Object Mapper: [Neode](https://github.com/adam-cowley/neode)
 
 ### Run Neo4j
 We are using docker. You can setup using whatever you feel comfortable in.
