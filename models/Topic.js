@@ -20,6 +20,7 @@ module.exports = {
         },
         eager: true
     },
+
     "version":"number",
     "lastLogin":"datetime",
     "createdAt":"datetime",

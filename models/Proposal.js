@@ -20,16 +20,6 @@ module.exports = {
         eager: true
     },
 
-    "createdBy": {
-        type: "relationship",
-        target: "User",
-        relationship: "CREATED_BY",
-        direction: "in",
-        properties: {
-            name: "string"
-        },
-        eager: true
-    },
     "version":"number",
     "lastLogin":"datetime",
     "createdAt":"datetime",

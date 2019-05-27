@@ -35,3 +35,7 @@ node server.js
 ## Contributors
 
 - [Ani](https://github.com/anistark)
+
+## Resources references
+
+- [Neo4j relationship properties comparision](https://neo4j.com/developer/kb/comparing-relationship-properties-within-a-path/)
