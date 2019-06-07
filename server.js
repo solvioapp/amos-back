@@ -1,6 +1,7 @@
 /**
  * A basic example using Express to create a simple movie recommendation engine.
  */
+require('dotenv').config()
 const express = require('express');
 const session = require('express-session');
 const path = require('path');

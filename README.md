@@ -26,6 +26,8 @@ npm install
 node server.js
 ```
 
+### [API Collection](https://www.getpostman.com/collections/b31f90c3201374888bdc)
+
 ##### [Meeting Notes](https://hackmd.io/jzQRquIjS4CU-_IICNIGcQ)
 
 ---

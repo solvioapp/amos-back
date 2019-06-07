@@ -32,6 +32,7 @@
         "dotenv": "^8.0.0",
         "express": "^4.15.3",
         "express-session": "^1.15.6",
+        "jsonwebtoken": "^8.5.1",
         "neode": "^0.2.3"
     },
     "devDependencies": {
