@@ -8,7 +8,6 @@ module.exports = {
     "description":"text",
 
     "tags":"array",
-    "parentTopicId":"string",
 
     "createdBy": {
         type: "relationship",
