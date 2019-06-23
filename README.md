@@ -27,15 +27,13 @@ npm install
 node server.js
 ```
 
-### [API Collection](https://www.getpostman.com/collections/b31f90c3201374888bdc)
-
 ##### [Meeting Notes](https://hackmd.io/jzQRquIjS4CU-_IICNIGcQ)
 
 ---
 
 #### Check out [solvio.org](http://solvio.org) for more info.
 
-## Contributors
+## [Contributors](https://github.com/solviofoundation/amos-back/graphs/contributors)
 
 - [Ani](https://github.com/anistark)
 
