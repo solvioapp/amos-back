@@ -3,21 +3,19 @@ const {makeExecutableSchema} = require('graphql-tools')
 const resolvers = require('./resolvers')
 
 const schema = `
-type Movie {
-    movieId: String!
-    title: String
-    year: Int
-    plot: String
-    poster: String
-    imdbRating: Float
-    genres: [String]
-    similar: [Movie]
+type User {
+    id: Int!
+    username: String!
+    email: String!
 }
+
 type Query {
-    movies(subString: String!, limit: Int!): [Movie]
+    me: User
 }
-schema {
-    query: Query
+
+type Mutation {
+    signup (username: String!, email: String!, password: String!): String
+    login (email: String!, password: String!): String
 }
 `;
 

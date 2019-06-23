@@ -1,40 +1,63 @@
+const bcrypt = require('bcrypt')
+const jsonwebtoken = require('jsonwebtoken')
+
 let neo4j = require('neo4j-driver').v1;
-let driver = neo4j.driver("bolt://54.236.8.156:33471", neo4j.auth.basic("neo4j", "carburetor-requirement-kick"));
+let driver = neo4j.driver(process.env.NEO4J_PROTOCOL + "://" + process.env.NEO4J_HOST + ":" + process.env.NEO4J_PORT, neo4j.auth.basic(process.env.NEO4J_USERNAME, process.env.NEO4J_PASSWORD));
 
 const resolveFunctions = {
-  Query: {
-    movies(_, params) {
-      let session = driver.session();
-      let query = "MATCH (movie:Movie) WHERE movie.title CONTAINS $subString RETURN movie LIMIT $limit;"
-      return session.run(query, params)
-        .then( result => { return result.records.map(record => { return record.get("movie").properties })})
+    Query: {
+        // fetch the profile of currently authenticated user
+        async me(_, args, {user}) {
+            // make sure user is logged in
+            if (!user) {
+                throw new Error('You are not authenticated!')
+            }
+
+            // user is authenticated
+            return await User.findById(user.id)
+        }
     },
-  },
-  Movie: {
-    similar(movie) {
-      let session = driver.session(),
-          params = {movieId: movie.movieId},
-          query = `
-            MATCH (m:Movie) WHERE m.movieId = $movieId
-            MATCH (m)-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(movie:Movie)
-            WITH movie, COUNT(*) AS score
-            RETURN movie ORDER BY score DESC LIMIT 3
-          `
-      return session.run(query, params)
-        .then( result => { return result.records.map(record => { return record.get("movie").properties })})
-    },
-    genres(movie) {
-      let session = driver.session(),
-          params = {movieId: movie.movieId},
-          query = `
-            MATCH (m:Movie)-[:IN_GENRE]->(g:Genre)
-            WHERE m.movieId = $movieId
-            RETURN g.name AS genre;
-          `
-      return session.run(query, params)
-        .then( result => { return result.records.map(record => { return record.get("genre") })})
+
+    Mutation: {
+        // Handle user signup
+        async signup(_, {username, email, password}) {
+            const user = await User.create({
+                username,
+                email,
+                password: await bcrypt.hash(password, 10)
+            })
+
+            // return json web token
+            return jsonwebtoken.sign({
+                id: user.id,
+                email: user.email
+            }, process.env.JWT_SECRET, {expiresIn: '1y'})
+        },
+
+        // Handles user login
+        async login(_, {email, password}) {
+            const user = await User.findOne({where: {
+                    email
+                }})
+
+            if (!user) {
+                throw new Error('No user with that email')
+            }
+
+            const valid = await bcrypt.compare(password, user.password)
+
+            if (!valid) {
+                throw new Error('Incorrect password')
+            }
+
+            // return json web token
+            return jsonwebtoken.sign({
+                id: user.id,
+                email: user.email
+            }, process.env.JWT_SECRET, {expiresIn: '1d'})
+        }
     }
-  },
+
 };
 
 // export default resolveFunctions;
