@@ -8,6 +8,7 @@ Node : v12.2.0
 - Routing: [Express](https://expressjs.com/)
 - Database: [Neo4j](https://neo4j.com/)
 - Object Mapper: [Neode](https://github.com/adam-cowley/neode)
+- Query: [GraphQL](https://graphql.org/)
 
 ### Run Neo4j
 We are using docker. You can setup using whatever you feel comfortable in.
