@@ -20,10 +20,6 @@ const authMiddleware = jwt({
 
 app.use(authMiddleware)
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({schema, context: {}}));
-
-app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}));
-
 app.use('/api', bodyParser.json(), authMiddleware, graphqlExpress(req => ({
     schema,
     context: {
