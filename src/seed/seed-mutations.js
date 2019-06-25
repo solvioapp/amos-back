@@ -16,7 +16,7 @@ export default /* GraphQL */ `
       email,
       reputation
     }
-    u1: CreateUser(email: "Ani", reputation: 0) {
+    u5: CreateUser(email: "Ani", reputation: 0) {
       email,
       reputation
     }
@@ -30,16 +30,15 @@ export default /* GraphQL */ `
     ) {
       name
     }
-    t4: CreateTopic(
+    t3: CreateTopic(
       name: "Web development"
     ) {
       name
     }
-    t5: CreateTopic(
+    t4: CreateTopic(
       name: "GraphQL"
     ) {
       name
     }
-      
   }
 `;
