@@ -16,6 +16,8 @@ type Resource {
 }
 
 type AmosGame {
+  # Fsr this type doesn't compile  if it  doesn't have an id:
+  id: ID!
   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
   votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
 }
