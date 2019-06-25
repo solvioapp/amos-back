@@ -1,0 +1,21 @@
+type User {
+  email: String!
+  votes: [AmosGame!]! @relation(name: "VOTED_BY", direction: "IN")
+  reputation: Int!
+}
+
+type Topic {
+  name: String!
+  parents: [Topic!]! @relation(name: "IS_PART_OF", direction: "OUT")
+}
+
+type Resource {
+  name: String
+  urls: [String!]!
+  amosGames: [AmosGame!]! @relation(name: "FOR_RESOURCE", direction: "IN")
+}
+
+type AmosGame {
+  resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
+  votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
+}
