@@ -1,6 +1,7 @@
 type User {
   email: String!
   reputation: Int!
+  created: DateTime!
   votes: [VOTED_BY!]! 
 }
 
@@ -44,8 +45,7 @@ type AmosGame {
 type VOTED_BY @relation(name: "VOTED_BY") {
   from: AmosGame!
   to: User!
-  # TODO: Change to DateTime
-  timestamp: Int!
+  timestamp: DateTime!
   ownRepAtVote: Int!
   agreeingRep: Int!
 }

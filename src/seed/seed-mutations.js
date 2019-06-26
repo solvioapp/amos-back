@@ -1,26 +1,32 @@
 export default /* GraphQL */ `
   mutation {
-    d1:  DeleteUser(email: "Dom") {
-      email
-      reputation
-    }
-    u1: CreateUser(email: "Dom", reputation: 0) {
+    u1: CreateUser(email: "Dom", reputation: 0, created: {
+        formatted: "1995-10-09T00:00:00Z"
+      }) {
       email,
       reputation
     }
-    u2: CreateUser(email: "Mukul", reputation: 0) {
+    u2: CreateUser(email: "Mukul", reputation: 0, created: {
+      formatted: "1992-10-09T00:00:00Z"
+    }) {
       email,
       reputation
     }
-    u3: CreateUser(email: "Jost", reputation: 0) {
+    u3: CreateUser(email: "Jost", reputation: 0, created: {
+      formatted: "1993-10-09T00:00:00Z"
+    }) {
       email,
       reputation
     }
-    u4: CreateUser(email: "Sultan", reputation: 0) {
+    u4: CreateUser(email: "Sultan", reputation: 0, created: {
+      formatted: "1994-10-09T00:00:00Z"
+    }) {
       email,
       reputation
     }
-    u5: CreateUser(email: "Ani", reputation: 0) {
+    u5: CreateUser(email: "Ani", reputation: 0, created: {
+      formatted: "1991-10-09T00:00:00Z"
+    }) {
       email,
       reputation
     }
@@ -139,7 +145,9 @@ export default /* GraphQL */ `
     }, to: {
       email: "Dom"
     }, data: {
-      timestamp: 1
+      timestamp: {
+        formatted: "1992-10-09T00:00:00Z"
+      }
       ownRepAtVote: 1
       agreeingRep: 0
     }) {
