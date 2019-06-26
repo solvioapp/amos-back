@@ -1,30 +1,30 @@
 export default /* GraphQL */ `
   mutation {
-    u1: CreateUser(email: "Dom", reputation: 0, created: {
+    u1: CreateUser(email: "Dom", reputation: 0, createdAt: {
         formatted: "1995-10-09T00:00:00Z"
       }) {
       email,
       reputation
     }
-    u2: CreateUser(email: "Mukul", reputation: 0, created: {
+    u2: CreateUser(email: "Mukul", reputation: 0, createdAt: {
       formatted: "1992-10-09T00:00:00Z"
     }) {
       email,
       reputation
     }
-    u3: CreateUser(email: "Jost", reputation: 0, created: {
+    u3: CreateUser(email: "Jost", reputation: 0, createdAt: {
       formatted: "1993-10-09T00:00:00Z"
     }) {
       email,
       reputation
     }
-    u4: CreateUser(email: "Sultan", reputation: 0, created: {
+    u4: CreateUser(email: "Sultan", reputation: 0, createdAt: {
       formatted: "1994-10-09T00:00:00Z"
     }) {
       email,
       reputation
     }
-    u5: CreateUser(email: "Ani", reputation: 0, created: {
+    u5: CreateUser(email: "Ani", reputation: 0, createdAt: {
       formatted: "1991-10-09T00:00:00Z"
     }) {
       email,
@@ -48,15 +48,6 @@ export default /* GraphQL */ `
     t4: CreateTopic(
       name: "GraphQL"
     ) {
-      name
-    }
-    r1: CreateResource(name: "GraphQL", urls: ["https://graphql.org"]) {
-      name
-    }
-    r2: CreateResource(name: "How to GraphQL", urls: ["https://howtographql.com"]) {
-      name
-    }
-    r3: CreateResource(name: "GRANDStack", urls: ["https://grandstack.io"]) {
       name
     }
     tp1: AddTopicParents(from: {
@@ -86,13 +77,28 @@ export default /* GraphQL */ `
         name
       }
     }
-
-    # r1ag1: CreateAmosGame(id: "r1ag1", resource: {
-    #   name: "GraphQL"
-    # }) {
-    #   id
-    # }
-    
+    r1: CreateResource(name: "GraphQL", urls: ["https://graphql.org"]) {
+      name
+    }
+    r2: CreateResource(name: "How to GraphQL", urls: ["https://howtographql.com"]) {
+      name
+    }
+    r3: CreateResource(name: "GRANDStack", urls: ["https://grandstack.io"]) {
+      name
+    }
+    r1c: AddResourceCreatedBy(from: {
+      name: "GraphQL"
+    }, to: {
+      email: "Dom"
+    }, data: {
+      timestamp: {
+        formatted: "2001-10-09T00:00:00Z"
+      }
+    }) {
+      from {
+        name
+      }
+    }
     r1ag1: CreateAmosGame(id: "r1ag1") {
       id
     }
@@ -111,18 +117,8 @@ export default /* GraphQL */ `
     r3ag2: CreateAmosGame(id: "r3ag2") {
       id
     }
-
-    # fr1: AddResourceAmosGames(from: {
-    #   id: "r1ag1"
-    # }, to: {
-    #   name: "GraphQL"
-    # }) {
-    #   from {
-    #     id
-    #   }
-    # }
-
-    fr1b: AddAmosGameResource(from: {
+    # Could also be called AddAmosGameResource
+    fr1: AddResourceAmosGames(from: {
       id: "r1ag1"
     }, to: {
       name: "GraphQL"
@@ -131,15 +127,6 @@ export default /* GraphQL */ `
         id
       }
     }
-    # us1: AddUserVotes(from: {
-    #   id: "r1ag1"
-    # }, to: {
-    #   email: "Dom"
-    # }) {
-    #   from {
-    #     id
-    #   }
-    # }
     us1: AddUserVotes(from: {
       id: "r1ag1"
     }, to: {
