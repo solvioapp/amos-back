@@ -1,24 +1,24 @@
 type User {
   email: String!
-  votes: [Vote!]! 
   reputation: Int!
+  votes: [VOTED_BY!]! 
 }
 
 type Topic {
   name: String!
-  parents: [Topic!]! @relation(name: "IS_PART_OF", direction: "OUT")
+  parents: [IS_PART_OF!]!
 }
 
 type Resource {
   name: String
   urls: [String!]!
-  amosGames: [AmosGame!]! @relation(name: "FOR_RESOURCE", direction: "IN")
+  amosGames: [FOR_RESOURCE!]!
 }
 
 type AmosGame {
   id: ID!
-  resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
-  votes: [Vote!]!
+  resource: FOR_RESOURCE!
+  votes: [VOTED_BY!]!
 }
 
 # type AmosGameTopic implements AmosGame {
@@ -39,13 +39,25 @@ type AmosGame {
 #   # votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
 # }
 
-type Vote @relation(name: "VOTED_BY") {
+# RELATIONS
+
+type VOTED_BY @relation(name: "VOTED_BY") {
   from: AmosGame!
   to: User!
   # TODO: Change to DateTime
   timestamp: Int!
   ownRepAtVote: Int!
   agreeingRep: Int!
+}
+
+type IS_PART_OF @relation(name: "IS_PART_OF") {
+  from: Topic!
+  to: Topic!
+}
+
+type FOR_RESOURCE @relation(name: "FOR_RESOURCE") {
+  from: AmosGame!
+  to: Resource!
 }
 
 # Query {
