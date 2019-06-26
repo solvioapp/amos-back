@@ -18,6 +18,7 @@ type Resource {
 }
 
 type AmosGame {
+# Fsr this doesn't compile if it doesn't have an id
   id: ID!
   resource: FOR_RESOURCE!
   votes: [VOTED_BY!]!
