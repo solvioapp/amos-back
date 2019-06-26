@@ -24,16 +24,16 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-client
-  .query({
-    query: gql(seedqueries)
-  })
-  .then(data => console.log(data.data))
-  .catch(error => console.log(error))
-
 // client
-//   .mutate({
-//     mutation: gql(seedmutations)
+//   .query({
+//     query: gql(seedqueries)
 //   })
-//   .then(data => console.log(data))
-//   .catch(error => console.error(error));
+//   .then(data => console.log(data.data))
+//   .catch(error => console.log(error))
+
+client
+  .mutate({
+    mutation: gql(seedmutations)
+  })
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
