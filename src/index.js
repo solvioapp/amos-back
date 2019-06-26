@@ -58,6 +58,10 @@ const path = "/graphql";
 */
 server.applyMiddleware({app, path});
 
+app.post('/', function (req, res) {
+  res.send('Hello World')
+})
+
 app.listen({port, path}, () => {
   console.log(`GraphQL server ready at http://localhost:${port}${path}`);
 });
