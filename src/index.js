@@ -4,6 +4,7 @@ import express from "express";
 import { v1 as neo4j } from "neo4j-driver";
 import { makeAugmentedSchema } from "neo4j-graphql-js";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 
 // set environment variables from ../.env
 dotenv.config();
@@ -58,9 +59,16 @@ const path = "/graphql";
 */
 server.applyMiddleware({app, path});
 
-app.post('/', function (req, res) {
-  res.send('Hello World')
-})
+app.use(bodyParser.json());
+
+const addReview = (req, res) => {
+  // console.log('asdf', req)
+  // console.log('req.body', req.body)
+  // console.log('zxcv', res)
+
+}
+
+app.post('/add-review', addReview)
 
 app.listen({port, path}, () => {
   console.log(`GraphQL server ready at http://localhost:${port}${path}`);

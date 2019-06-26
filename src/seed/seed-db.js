@@ -3,6 +3,7 @@ import { ApolloLink } from "apollo-link";
 import gql from "graphql-tag";
 import dotenv from "dotenv";
 import seedmutations from "./seed-mutations";
+import seedqueries from "./seed-queries";
 import fetch from "node-fetch";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -24,8 +25,15 @@ const client = new ApolloClient({
 });
 
 client
-  .mutate({
-    mutation: gql(seedmutations)
+  .query({
+    query: gql(seedqueries)
   })
-  .then(data => console.log(data))
-  .catch(error => console.error(error));
+  .then(data => console.log(data.data))
+  .catch(error => console.log(error))
+
+// client
+//   .mutate({
+//     mutation: gql(seedmutations)
+//   })
+//   .then(data => console.log(data))
+//   .catch(error => console.error(error));
