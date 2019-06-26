@@ -1,6 +1,6 @@
 type User {
   email: String!
-  votes: [AmosGame!]! @relation(name: "VOTED_BY", direction: "IN")
+  votes: [Vote!]! 
   reputation: Int!
 }
 
@@ -18,7 +18,7 @@ type Resource {
 type AmosGame {
   id: ID!
   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
-  votes: [VotedBy!]! 
+  votes: [Vote!]!
 }
 
 # type AmosGameTopic implements AmosGame {
@@ -39,7 +39,7 @@ type AmosGame {
 #   # votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
 # }
 
-type VotedBy @relation(name: "VOTED_BY") {
+type Vote @relation(name: "VOTED_BY") {
   from: AmosGame!
   to: User!
   # TODO: Change to DateTime
