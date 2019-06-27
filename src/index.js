@@ -1,15 +1,26 @@
 import { typeDefs } from "./graphql-schema";
-import { ApolloServer } from "apollo-server";
-// import express from "express";
+import { ApolloServer, gql } from "apollo-server";
+import express from "express";
 import { v1 as neo4j } from "neo4j-driver";
 import { makeAugmentedSchema } from "neo4j-graphql-js";
 import dotenv from "dotenv";
-// import bodyParser from "body-parser";
+import bodyParser from "body-parser";
+
+import ApolloClient from "apollo-client";
+import { ApolloLink } from "apollo-link";
+import fetch from "node-fetch";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { onError } from 'apollo-link-error'
+import seedmutations from "./seed/seed-mutations";
+import seedqueries from "./seed/seed-queries";
+
+import { getPageTitle } from './helper'
 
 // set environment variables from ../.env
 dotenv.config();
 
-// const app = express();
+const app = express();
 
 /*
  * Create an executable GraphQL schema object from GraphQL type definitions
@@ -50,8 +61,23 @@ const server = new ApolloServer({
 });
 
 server.listen({port: 4001}).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`)
+  console.log(`🚀 GraphQL server ready at ${url}`)
 });
+
+
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message))
+})
+
+const client = new ApolloClient({
+  link: ApolloLink.from([errorLink, new HttpLink({
+    uri: process.env.GRAPHQL_URI,
+    fetch
+  })]),
+  cache: new InMemoryCache(),
+});
+
+
 
 // Specify port and path for GraphQL endpoint
 // const port = process.env.GRAPHQL_LISTEN_PORT || 4001;
@@ -63,20 +89,100 @@ server.listen({port: 4001}).then(({ url }) => {
 */
 // server.applyMiddleware({app, path});
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
-// const submitReview = (req, res) => {
-//   // console.log('asdf', req)
-//   // console.log('req.body', req.body)
-//   // console.log('zxcv', res)
-//   const {links, topics, requirements} = req.body
-//   if (links) {
-//     console.log('links', links)
-//   }
-//   res.send('success')
-// }
+function createMutation (user, ownRepAtVote, now, links, title, topics, requirements) {
+  console.log('arguments', arguments)
+  return `
+    mutation {
+      r1: CreateResource(title: "${title}", links: "${links}") {
+        title
+      }
+      r1c: AddResourceCreatedBy(from: {
+        title: "${title}"
+      }, to: {
+        email: "${user}"
+      }, data: {
+        timestamp: {
+          formatted: "${now}"
+        }
+      }) {
+        from {
+          title
+        }
+      }
+      ag1: CreateAmosGame(id: "ag1") {
+        id
+      }
+      rag1: AddResourceAmosGames(from: {
+        id: "ag1"
+      }, to: {
+        title: "${title}"
+      }) {
+        from {
+          id
+        }
+      }
+      us1: AddUserVotes(from: {
+        id: "ag1"
+      }, to: {
+        email: "${user}"
+      }, data: {
+        timestamp: {
+          formatted: "${now}"
+        }
+        ownRepAtVote: ${ownRepAtVote}
+        agreeingRep: 0
+      }) {
+        from {
+          id
+        }
+      }
+    }
+  `
+}
 
-// app.post('/submit-review', submitReview)
+const submitReview = (req, res) => {
+  // console.log('asdf', req)
+  // console.log('req.body', req.body)
+  // console.log('zxcv', res)
+  
+  const {links, topics, requirements} = req.body
+
+  // Check review has at least one link
+  if (!links) {
+    throw 'No links field'
+  }
+  
+  getPageTitle(links[0])
+    .then(title => {
+      console.log('working?', )
+      const now = (new Date()).toISOString()
+
+      const mutation = createMutation('Mukul', 0, now, links, title, topics, requirements)
+      console.log('mutation', mutation)
+      client
+        .mutate({
+          mutation: gql(mutation)
+        })
+        .then(data => console.log(data.data))
+        .catch(error => console.log(error))
+
+      res.send('success')
+    })
+    .catch(() => {
+      res.send('something bad happened. Please try again later')
+    })
+  
+}
+
+app.post('/submit-review', submitReview)
+
+const port = 4002
+
+app.listen({port}, () => {
+  console.log(`Express app ready at http://localhost:${port}`);
+});
 
 // app.listen({port, path}, () => {
 //   console.log(`GraphQL server ready at http://localhost:${port}${path}`);

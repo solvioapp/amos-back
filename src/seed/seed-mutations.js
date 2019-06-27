@@ -77,17 +77,17 @@ export default /* GraphQL */ `
         name
       }
     }
-    r1: CreateResource(name: "GraphQL", urls: ["https://graphql.org"]) {
-      name
+    r1: CreateResource(title: "GraphQL", links: ["https://graphql.org"]) {
+      title
     }
-    r2: CreateResource(name: "How to GraphQL", urls: ["https://howtographql.com"]) {
-      name
+    r2: CreateResource(title: "How to GraphQL", links: ["https://howtographql.com"]) {
+      title
     }
-    r3: CreateResource(name: "GRANDStack", urls: ["https://grandstack.io"]) {
-      name
+    r3: CreateResource(title: "GRANDStack", links: ["https://grandstack.io"]) {
+      title
     }
     r1c: AddResourceCreatedBy(from: {
-      name: "GraphQL"
+      title: "GraphQL"
     }, to: {
       email: "Dom"
     }, data: {
@@ -96,7 +96,7 @@ export default /* GraphQL */ `
       }
     }) {
       from {
-        name
+        title
       }
     }
     r1ag1: CreateAmosGame(id: "r1ag1") {
@@ -121,7 +121,7 @@ export default /* GraphQL */ `
     fr1: AddResourceAmosGames(from: {
       id: "r1ag1"
     }, to: {
-      name: "GraphQL"
+      title: "GraphQL"
     }) {
       from {
         id

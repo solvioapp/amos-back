@@ -11,8 +11,8 @@ type Topic {
 }
 
 type Resource {
-  name: String
-  urls: [String!]!
+  title: String
+  links: [String!]!
   createdBy: RESOURCE_CREATED_BY!
   amosGames: [FOR_RESOURCE!]!
 }

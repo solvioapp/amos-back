@@ -20,6 +20,7 @@
     "apollo-server": "^2.6.2",
     "body-parser": "^1.19.0",
     "dotenv": "^7.0.0",
+    "get-title-at-url": "^1.1.6",
     "graphql-tag": "^2.10.1",
     "neo4j-driver": "^1.7.3",
     "neo4j-graphql-js": "^2.6.3",
