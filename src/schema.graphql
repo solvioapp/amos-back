@@ -1,4 +1,5 @@
 type User {
+  id: ID!
   email: String!
   votes: [AmosGame!]! @relation(name: "VOTED_BY", direction: "IN")
   reputation: Int!
@@ -20,4 +21,30 @@ type AmosGame {
   id: ID!
   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
   votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
+}
+
+type Query {
+  currentUser: User
+    @cypher(
+      statement: "MATCH (u:User {id: $user}) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+  users: [User!]
+    @cypher(
+      statement: "MATCH (u:User) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+  user(id: ID!): User
+    @cypher(
+      statement: "MATCH (u:User) WHERE u.id = $id WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+}
+
+type Mutation {
+  RegisterUser(email: String!, password: String!, username: String!): User!
+    @cypher(
+      statement: "CALL apoc.create.uuids(1) YIELD uuid CREATE (l:LOCAL_ACCOUNT {password: $password, email: $email})<-[:AUTHENTICATED_WITH]-(u:User {email: $email, username: $username, id: uuid}) RETURN u"
+    )
+  Login(email: String!, password: String!): String
+    @cypher(
+      statement: "MATCH (u:User {email: $email})-[:AUTHENTICATED_WITH]->(l:LOCAL_ACCOUNT {email: $email}) WITH { username: u.username, id: u.id, password: l.password} as LoginInfo RETURN LoginInfo"
+    )
 }

@@ -1,12 +1,18 @@
+import cors from "cors";
 import { typeDefs } from "./graphql-schema";
+import { resolvers } from "./resolvers";
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import { v1 as neo4j } from "neo4j-driver";
 import { makeAugmentedSchema } from "neo4j-graphql-js";
 import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
+import body from 'body-parser'
+
 
 // set environment variables from ../.env
 dotenv.config();
+export const SECRET = process.env.JWT_SECRET || "shittySecret8675309";
 
 const app = express();
 
@@ -19,7 +25,8 @@ const app = express();
  */
 
 const schema = makeAugmentedSchema({
-  typeDefs
+  typeDefs,
+  resolvers
 });
 
 /*
@@ -41,11 +48,34 @@ const driver = neo4j.driver(
  * instance into the context object so it is available in the
  * generated resolvers to connect to the database.
  */
+
+
+ // Custom middleware to add a user object to the server requests
+const injectUser = async req => {
+  const token = req.headers.authorization;
+  try {
+    const { user } = await jwt.verify(token, SECRET);
+    req.user = user;
+    
+  } catch (error) {
+    // error
+  }
+  req.next();
+};
+
+// Load facebook auth only if credentials present in .env
+if (process.env.FB_ID && process.env.FB_SECRET) {
+  require("./auth/facebook");
+}
+// Add Middleware to our Express server
+app.use(cors());
+app.use(injectUser);
+
 const server = new ApolloServer({
-  context: { driver },
-  schema: schema,
+  context: ({ req }) => ({ driver, SECRET, user: req.user || null }),
+  schema,
   introspection: true,
-  playground: true
+  playground: true,
 });
 
 // Specify port and path for GraphQL endpoint
