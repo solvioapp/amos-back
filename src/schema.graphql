@@ -1,23 +1,25 @@
 type User {
   id: ID!
   email: String!
-  votes: [AmosGame!]! @relation(name: "VOTED_BY", direction: "IN")
   reputation: Int!
+  createdAt: DateTime!
+  votes: [VOTED_BY!]! 
 }
 
 type Topic {
   name: String!
-  parents: [Topic!]! @relation(name: "IS_PART_OF", direction: "OUT")
+  parents: [IS_PART_OF!]!
 }
 
 type Resource {
   name: String
   urls: [String!]!
-  amosGames: [AmosGame!]! @relation(name: "FOR_RESOURCE", direction: "IN")
+  createdBy: RESOURCE_CREATED_BY!
+  amosGames: [FOR_RESOURCE!]!
 }
 
 type AmosGame {
-  # Fsr this type doesn't compile  if it  doesn't have an id:
+# Fsr this doesn't compile if it doesn't have an id
   id: ID!
   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
   votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
@@ -48,3 +50,54 @@ type Mutation {
       statement: "MATCH (u:User {email: $email})-[:AUTHENTICATED_WITH]->(l:LOCAL_ACCOUNT {email: $email}) WITH { username: u.username, id: u.id, password: l.password} as LoginInfo RETURN LoginInfo"
     )
 }
+
+# type AmosGameTopic implements AmosGame {
+#   # Fsr this type doesn't compile  if it  doesn't have an id:
+#   id: ID!
+#   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
+#   topic: Topic!
+#   votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
+# }
+
+# type AmosGameLearningRequirement implements AmosGame {
+#   id: ID!
+#   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
+#   strength: Int!
+#   level: Int!
+#   topic:  Topic!
+#   # votes: [VotedBy!]!
+#   # votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
+# }
+
+# RELATIONS
+
+type VOTED_BY @relation(name: "VOTED_BY") {
+  from: AmosGame!
+  to: User!
+  timestamp: DateTime!
+  ownRepAtVote: Int!
+  agreeingRep: Int!
+}
+
+type IS_PART_OF @relation(name: "IS_PART_OF") {
+  from: Topic!
+  to: Topic!
+}
+
+type FOR_RESOURCE @relation(name: "FOR_RESOURCE") {
+  from: AmosGame!
+  to: Resource!
+}
+
+type RESOURCE_CREATED_BY @relation(name: "RESOURCE_CREATED_BY") {
+  from: Resource!
+  to: User!
+  timestamp: DateTime!
+}
+
+# Query {
+#   User
+#   Topic
+#   Resource
+#   AmosGame
+# }
