@@ -12,7 +12,7 @@ passport.use(
       clientSecret: process.env.FB_SECRET, // found on your facebook app profile
       callbackURL:
         process.env.FB_CALLBACK_URI ||
-        "http://localhost:8000/login-facebook/callback", // should be the base URI for your server followed `/login-facebook/callback`
+        `http://localhost:${GRAPHQL_LISTEN_PORT}/login-facebook/callback`, // should be the base URI for your server followed `/login-facebook/callback`
       profileFields: ["id", "displayName", "email"]
     },
     async (accessToken, refreshToken, profile, callback) => {
@@ -87,7 +87,7 @@ app.get(
     // Pass JWT to the client side in a URL Query Param
     res.redirect(
       `${process.env.CLIENT_URI ||
-        "http://localhost:3000"}/?token=${signedToken}`
+        `http://localhost:${process.env.CLIENT_URI_PORT}`}/?token=${signedToken}`
     );
   }
 );
