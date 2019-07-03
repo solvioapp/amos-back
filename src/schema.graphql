@@ -3,7 +3,8 @@ type User {
   email: String!
   reputation: Int!
   createdAt: DateTime!
-  votes: [VOTED_BY!]! 
+  votes: [VOTED_BY!]!,
+  username: String! 
 }
 
 type Topic {
@@ -41,7 +42,7 @@ type Query {
 }
 
 type Mutation {
-  RegisterUser(email: String!, password: String!, username: String!): User!
+  RegisterUser(email: String!, password: String!, username: String!): String
     @cypher(
       statement: "CALL apoc.create.uuids(1) YIELD uuid CREATE (l:LOCAL_ACCOUNT {password: $password, email: $email})<-[:AUTHENTICATED_WITH]-(u:User {email: $email, username: $username, id: uuid}) RETURN u"
     )

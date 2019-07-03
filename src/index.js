@@ -69,7 +69,7 @@ if (process.env.FB_ID && process.env.FB_SECRET) {
 }
 // Add Middleware to our Express server
 app.use(cors());
-app.use(injectUser);
+app.use("*", injectUser);
 
 const server = new ApolloServer({
   context: ({ req }) => ({ driver, SECRET, user: req.user || null }),
