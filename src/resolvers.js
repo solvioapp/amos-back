@@ -12,7 +12,7 @@ import {
 
 export const resolvers = {
   Mutation: {
-    RegisterUser: async (object, params, context, resolveInfo) => {
+    CreateUser: async (object, params, context, resolveInfo) => {
       const user = params;
 
       // Check if user exist already with email
@@ -70,13 +70,21 @@ export const resolvers = {
           user: {
             id: user.id,
             username: user.username,
-            email: user.email
+            email
           }
         },
         context.SECRET
       );
 
       return `${signedToken}`;
+    },
+    UpdateUser: async (object, params, context, resolveInfo) => {
+      if (isNil(context.user && context.user.id)) {
+        throw new Error('Authentication required!')
+        return null;
+      }
+      const updatedUSer = await neo4jgraphql(object, params, context, resolveInfo, true);
+      return updatedUSer
     }
   },
   Query: {
