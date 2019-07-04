@@ -85,7 +85,49 @@ export const resolvers = {
       }
       const updatedUSer = await neo4jgraphql(object, params, context, resolveInfo, true);
       return updatedUSer
-    }
+    },
+    UpdatePassword: async (object, params, context, resolveInfo) => {
+      if (isNil(context.user && context.user.id)) {
+        throw new Error('Authentication required!')
+        return null;
+      }
+      const {
+        password,
+        currentPassword,
+        email
+      } = params;
+
+
+      // Get password for current Email
+      const session = context.driver.session()
+      let query = 'Match (la:LOCAL_ACCOUNT) WHERE la.email = $email RETURN la;'
+      const userLA = await session.run(query, params).then(result => {
+        return result.records.map(record => {
+          return record.get('la').properties
+        })
+      })
+
+      if (userLA.length > 0) {
+        // Compare it
+        const valid = await bcrypt.compare(currentPassword, userLA[0].password);
+        console.log(valid, userLA[0].password, currentPassword)
+        // if currentPassword entered & fetched one is same
+        // Update Password
+        if (valid) {
+          params.password = await bcrypt.hash(password, 12);
+          const updatedUser = await neo4jgraphql(object, params, context, resolveInfo, true);
+          return 'Password Updated successfully!'
+        }
+        // Else throw error :D
+        else {
+          throw new Error('Password update failed!')
+        }
+      } else {
+        throw new Error('Password update failed! No user found!')
+      }
+      
+
+    },
   },
   Query: {
     currentUser: async (object, params, context, resolveInfo) => {

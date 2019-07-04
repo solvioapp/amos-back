@@ -53,6 +53,10 @@ type Mutation {
       statement: "MATCH (u:User {email: $email})-[:AUTHENTICATED_WITH]->(l:LOCAL_ACCOUNT {email: $email}) WITH { username: u.username, id: u.id, password: l.password} as LoginInfo RETURN LoginInfo"
     )
   UpdateUser(id: ID!, firstName: String!, lastName: String!): User!
+  UpdatePassword(email:String!, password: String!, currentPassword: String!): String!
+    @cypher(
+      statement: "MATCH (la:LOCAL_ACCOUNT{email: $email}) SET la+= {password:$password} RETURN la AS LOCAL_ACCOUNT"
+    )
 }
 
 # type AmosGameTopic implements AmosGame {
