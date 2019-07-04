@@ -1,9 +1,12 @@
 type User {
   id: ID!
   email: String!
+  firstName: String!
+  lastName: String!
   reputation: Int!
   createdAt: DateTime!
-  votes: [VOTED_BY!]! 
+  votes: [VOTED_BY!]!,
+  username: String! 
 }
 
 type Topic {
@@ -41,13 +44,18 @@ type Query {
 }
 
 type Mutation {
-  RegisterUser(email: String!, password: String!, username: String!): User!
+  CreateUser(email: String!, password: String!, username: String!, firstName: String!, lastName: String!, reputation: Int!): String
     @cypher(
       statement: "CALL apoc.create.uuids(1) YIELD uuid CREATE (l:LOCAL_ACCOUNT {password: $password, email: $email})<-[:AUTHENTICATED_WITH]-(u:User {email: $email, username: $username, id: uuid}) RETURN u"
     )
   Login(email: String!, password: String!): String
     @cypher(
       statement: "MATCH (u:User {email: $email})-[:AUTHENTICATED_WITH]->(l:LOCAL_ACCOUNT {email: $email}) WITH { username: u.username, id: u.id, password: l.password} as LoginInfo RETURN LoginInfo"
+    )
+  UpdateUser(id: ID!, firstName: String!, lastName: String!): User!
+  UpdatePassword(email:String!, password: String!, currentPassword: String!): String!
+    @cypher(
+      statement: "MATCH (la:LOCAL_ACCOUNT{email: $email}) SET la+= {password:$password} RETURN la AS LOCAL_ACCOUNT"
     )
 }
 
