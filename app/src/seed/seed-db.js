@@ -7,7 +7,7 @@ import fetch from "node-fetch";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { onError } from 'apollo-link-error'
-
+import config
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ const errorLink = onError(({ graphQLErrors }) => {
 
 const client = new ApolloClient({
   link: ApolloLink.from([errorLink, new HttpLink({
-    uri: process.env.GRAPHQL_URI,
+    uri: config.GRAPHQL_URI,
     fetch
   })]),
   cache: new InMemoryCache(),

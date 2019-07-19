@@ -3,16 +3,16 @@ import FacebookStrategy from "passport-facebook";
 import { isNil, kebabCase } from "lodash";
 import { app, driver, SECRET } from "../index";
 import { createToken } from "./auth";
+import config
 
 // Setting up our Facebook strategy for passport
 passport.use(
   new FacebookStrategy(
     {
-      clientID: process.env.FB_ID, // found on your facebook app profile
-      clientSecret: process.env.FB_SECRET, // found on your facebook app profile
+      clientID: config.FB_ID, // found on your facebook app profile
+      clientSecret: config.FB_SECRET, // found on your facebook app profile
       callbackURL:
-        process.env.FB_CALLBACK_URI ||
-        `http://localhost:${GRAPHQL_LISTEN_PORT}/login-facebook/callback`, // should be the base URI for your server followed `/login-facebook/callback`
+        config.FB_CALLBACK_URI, // should be the base URI for your server followed `/login-facebook/callback`
       profileFields: ["id", "displayName", "email"]
     },
     async (accessToken, refreshToken, profile, callback) => {
@@ -85,10 +85,7 @@ app.get(
     );
 
     // Pass JWT to the client side in a URL Query Param
-    res.redirect(
-      `${process.env.CLIENT_URI ||
-        `http://localhost:${CLIENT_URI_PORT}`}/?token=${signedToken}`
-    );
+    res.redirect(`${config.FB_CLIENT_URI}/?token=${signedToken}`);
   }
 );
 

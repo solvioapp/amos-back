@@ -6,7 +6,7 @@ type User {
   reputation: Int!
   createdAt: DateTime!
   votes: [VOTED_BY!]!,
-  username: String! 
+  username: String!
 }
 
 type Topic {

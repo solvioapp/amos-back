@@ -8,11 +8,11 @@ import { makeAugmentedSchema } from "neo4j-graphql-js";
 import dotenv from "dotenv";
 import jwt from 'jsonwebtoken';
 import body from 'body-parser'
-
+import config
 
 // set environment variables from ../.env
 dotenv.config();
-export const SECRET = process.env.JWT_SECRET || "shittySecret8675309";
+export const SECRET = config.JWT_SECRET;
 
 const app = express();
 
@@ -35,10 +35,10 @@ const schema = makeAugmentedSchema({
  * with fallback to defaults
  */
 const driver = neo4j.driver(
-  process.env.NEO4J_URI || "bolt://localhost:7687",
+  config.NEO4J_URI,
   neo4j.auth.basic(
-    process.env.NEO4J_USER || "neo4j",
-    process.env.NEO4J_PASSWORD || "neo4j"
+    config.NEO4J_USER,
+    config.NEO4J_PASSWORD
   )
 );
 
@@ -56,7 +56,7 @@ const injectUser = async req => {
   try {
     const { user } = await jwt.verify(token, SECRET);
     req.user = user;
-    
+
   } catch (error) {
     // error
   }
@@ -64,7 +64,7 @@ const injectUser = async req => {
 };
 
 // Load facebook auth only if credentials present in .env
-if (process.env.FB_ID && process.env.FB_SECRET) {
+if (config.FB_ID && config.FB_SECRET) {
   require("./auth/facebook");
 }
 // Add Middleware to our Express server
@@ -79,7 +79,7 @@ const server = new ApolloServer({
 });
 
 // Specify port and path for GraphQL endpoint
-const port = process.env.GRAPHQL_LISTEN_PORT || 4001;
+const port = config.GRAPHQL_LISTEN_PORT;
 const path = "/graphql";
 
 /*
@@ -89,5 +89,5 @@ const path = "/graphql";
 server.applyMiddleware({app, path});
 
 app.listen({port, path}, () => {
-  console.log(`GraphQL server ready at http://localhost:${port}${path}`);
+  console.log('GraphQL server ready at '+config.BASE_URL+path);
 });

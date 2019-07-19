@@ -1,7 +1,7 @@
 import {
   neo4jgraphql
 } from "neo4j-graphql-js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import {
   isNil
 } from "lodash";
@@ -125,7 +125,7 @@ export const resolvers = {
       } else {
         throw new Error('Password update failed! No user found!')
       }
-      
+
 
     },
   },
