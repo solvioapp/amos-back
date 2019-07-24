@@ -1,0 +1,111 @@
+type User {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  reputation: Int!
+  createdAt: DateTime!
+  votes: [VOTED_BY!]!,
+  username: String! 
+}
+
+type Topic {
+  name: String!
+  parents: [IS_PART_OF!]!
+}
+
+type Resource {
+  name: String
+  urls: [String!]!
+  createdBy: RESOURCE_CREATED_BY!
+  amosGames: [FOR_RESOURCE!]!
+}
+
+type AmosGame {
+# Fsr this doesn't compile if it doesn't have an id
+  id: ID!
+  resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
+  votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
+}
+
+type Query {
+  currentUser: User
+    @cypher(
+      statement: "MATCH (u:User {id: $user}) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+  users: [User!]
+    @cypher(
+      statement: "MATCH (u:User) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+  user(id: ID!): User
+    @cypher(
+      statement: "MATCH (u:User) WHERE u.id = $id WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+}
+
+type Mutation {
+  CreateUser(email: String!, password: String!, username: String!, firstName: String!, lastName: String!, reputation: Int!): String
+    @cypher(
+      statement: "CALL apoc.create.uuids(1) YIELD uuid CREATE (l:LOCAL_ACCOUNT {password: $password, email: $email})<-[:AUTHENTICATED_WITH]-(u:User {email: $email, username: $username, id: uuid}) RETURN u"
+    )
+  Login(email: String!, password: String!): String
+    @cypher(
+      statement: "MATCH (u:User {email: $email})-[:AUTHENTICATED_WITH]->(l:LOCAL_ACCOUNT {email: $email}) WITH { username: u.username, id: u.id, password: l.password} as LoginInfo RETURN LoginInfo"
+    )
+  UpdateUser(id: ID!, firstName: String!, lastName: String!): User!
+  UpdatePassword(email:String!, password: String!, currentPassword: String!): String!
+    @cypher(
+      statement: "MATCH (la:LOCAL_ACCOUNT{email: $email}) SET la+= {password:$password} RETURN la AS LOCAL_ACCOUNT"
+    )
+}
+
+# type AmosGameTopic implements AmosGame {
+#   # Fsr this type doesn't compile  if it  doesn't have an id:
+#   id: ID!
+#   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
+#   topic: Topic!
+#   votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
+# }
+
+# type AmosGameLearningRequirement implements AmosGame {
+#   id: ID!
+#   resource: Resource! @relation(name: "FOR_RESOURCE", direction: "OUT")
+#   strength: Int!
+#   level: Int!
+#   topic:  Topic!
+#   # votes: [VotedBy!]!
+#   # votes: [User!]! @relation(name: "VOTED_BY", direction: "OUT")
+# }
+
+# RELATIONS
+
+type VOTED_BY @relation(name: "VOTED_BY") {
+  from: AmosGame!
+  to: User!
+  timestamp: DateTime!
+  ownRepAtVote: Int!
+  agreeingRep: Int!
+}
+
+type IS_PART_OF @relation(name: "IS_PART_OF") {
+  from: Topic!
+  to: Topic!
+}
+
+type FOR_RESOURCE @relation(name: "FOR_RESOURCE") {
+  from: AmosGame!
+  to: Resource!
+}
+
+type RESOURCE_CREATED_BY @relation(name: "RESOURCE_CREATED_BY") {
+  from: Resource!
+  to: User!
+  timestamp: DateTime!
+}
+
+# Query {
+#   User
+#   Topic
+#   Resource
+#   AmosGame
+# }
