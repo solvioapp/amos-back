@@ -4,16 +4,26 @@ module.exports = {
         type: 'uuid',
         required: true,
     },
-    "name":"string",
-    "createdBy": {
+    "resource": {
         type: "relationship",
-        target: "User",
-        relationship: "CREATED_BY",
+        target: "Resource",
+        relationship: "RATED_FOR",
         direction: "in",
         properties: {},
         eager: true,
         cascade: 'detach'
     },
+
+    "votedBy": {
+        type: "relationship",
+        target: "User",
+        relationship: "VOTED_BY",
+        direction: "out",
+        properties: {},
+        eager: true,
+        cascade: 'detach'
+    },
+
     "version":"number",
     "lastLogin":"datetime",
     "createdAt":"datetime",
