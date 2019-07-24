@@ -20,7 +20,7 @@ module.exports = {
         indexed: true
     },
     "password":"string",
-    "profileImageUrl":{
+    "profileImageUrl": {
         type: "string",
         uri: {
             scheme: ["http", "https"]

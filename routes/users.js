@@ -3,6 +3,7 @@ module.exports = function(neode) {
     var utils = require('../utils');
     var helper = require('../helper');
 
+    // register new User account.
     router.post('/', function (req, res) {
         responseData = {}
         console.log('body:', req.body);
@@ -28,6 +29,7 @@ module.exports = function(neode) {
         })
     })
 
+    // User Login.
     router.post('/login', function (req, res) {
         responseData = {}
         // Get User with req.body.email and passwordCheck
@@ -78,36 +80,104 @@ module.exports = function(neode) {
         })
     })
 
-    router.get('/', function (req, res) {
+    // Fetch Other user's data.
+    router.get('/', helper.checkAuth, function (req, res) {
         responseData = {}
-        if ('authorization' in req.headers && req.headers.authorization.length > 0) {
-            utils.verifyAuthToken(req.headers.authorization, function (authErr, authorised) {
-                if(authErr) {
-                    responseData = {
-                        'success': false,
-                        'statusCode': 401,
-                        'data': null,
-                        'errors': authErr,
-                        'message': 'Unauthorized User!'
-                    }
+        neode.first('User', 'id', req.authorised)
+        .then(user => {
+            responseData = {
+                'success': true,
+                'statusCode': 200,
+                'data': {
+                    'email': user.get('email'),
+                    'firstName': user.get('firstName'),
+                    'lastName': user.get('lastName'),
+                    'username': user.get('username'),
+                    'profileImageUrl': user.get('profileImageUrl')
+                },
+                'errors': null,
+                'message': 'User data fetched successfully!'
+            }
+            helper.sendResponse(responseData, res)
+        })
+    })
+
+    // Fetch Other user's data.
+    // Should be allowed only to admin.
+    router.get('/:userId', helper.checkAuth, function (req, res) {
+        responseData = {}
+        neode.first('User', 'id', req.params.userId)
+        .then(user => {
+            responseData = {
+                'success': true,
+                'statusCode': 200,
+                'data': {
+                    'email': user.get('email'),
+                    'firstName': user.get('firstName'),
+                    'lastName': user.get('lastName'),
+                    'username': user.get('username'),
+                    'profileImageUrl': user.get('profileImageUrl')
+                },
+                'errors': null,
+                'message': 'User data fetched successfully!'
+            }
+            helper.sendResponse(responseData, res)
+        })
+    })
+
+    // Update user's own data.
+    router.put('/', helper.checkAuth, function (req, res) {
+        responseData = {}
+        neode.first('User', 'id', req.authorised)
+        .then(user => {
+            req.body.id = req.authorised
+            user.update(req.body)
+            .then(updatedUser => {
+                // console.log('updatedUser:', updatedUser);
+                responseData = {
+                    'success': true,
+                    'statusCode': 200,
+                    'data': {
+                        'email': updatedUser.get('email'),
+                        'firstName': updatedUser.get('firstName'),
+                        'lastName': updatedUser.get('lastName'),
+                        'username': updatedUser.get('username'),
+                        'profileImageUrl': updatedUser.get('profileImageUrl')
+                    },
+                    'errors': null,
+                    'message': 'User data fetched successfully!'
                 }
-                else {
-                    neode.first('User', 'id', authorised)
-                    .then(user => {
-                        responseData = {
-                            'success': true,
-                            'statusCode': 200,
-                            'data': {
-                                'email': user.get('email')
-                            },
-                            'errors': null,
-                            'message': 'User data fetched successfully!'
-                        }
-                        helper.sendResponse(responseData, res)
-                    })
-                }
+                helper.sendResponse(responseData, res)
             })
-        }
+        })
+    })
+
+    // Update other user's data.
+    // Should be allowed only to admin.
+    router.put('/:userId', helper.checkAuth, function (req, res) {
+        responseData = {}
+        neode.first('User', 'id', req.params.userId)
+        .then(user => {
+            req.body.id = req.params.userId
+            user.update(req.body)
+            .then(updatedUser => {
+                // console.log('updatedUser:', updatedUser);
+                responseData = {
+                    'success': true,
+                    'statusCode': 200,
+                    'data': {
+                        'email': updatedUser.get('email'),
+                        'firstName': updatedUser.get('firstName'),
+                        'lastName': updatedUser.get('lastName'),
+                        'username': updatedUser.get('username'),
+                        'profileImageUrl': updatedUser.get('profileImageUrl')
+                    },
+                    'errors': null,
+                    'message': 'User data fetched successfully!'
+                }
+                helper.sendResponse(responseData, res)
+            })
+        })
     })
 
     return router;

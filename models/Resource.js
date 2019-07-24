@@ -7,19 +7,15 @@ module.exports = {
     "link":"string",
 
     "title":"string",
-    "description":"text",
-
-    "tags":"array",
 
     "createdBy": {
         type: "relationship",
         target: "User",
         relationship: "CREATED_BY",
         direction: "in",
-        properties: {
-            name: "string"
-        },
-        eager: true
+        properties: {},
+        eager: true,
+        cascade: 'detach'
     },
 
     "version":"number",

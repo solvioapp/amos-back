@@ -34,6 +34,9 @@ app.get('/', (req, res) => {
 
 
 app.use('/api/v1/user', require('./routes/users')(neode))
+app.use('/api/v1/topic', require('./routes/topic')(neode))
+// app.use('/api/v1/resource', require('./routes/resource')(neode))
+// app.use('/api/v1/amosgame', require('./routes/amosGame')(neode))
 
 /**
  * Listen for requests on port 3000
