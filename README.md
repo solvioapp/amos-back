@@ -37,6 +37,9 @@ node server.js
 ## Contributors
 
 - [Ani](https://github.com/anistark)
+- [Dom](https://github.com/dteiml})
+- [Mukul](https://github.com/developerKumar)
+
 
 ## Resources references
 
