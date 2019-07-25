@@ -8,24 +8,47 @@ module.exports = function(neode) {
         responseData = {}
         console.log('body:', req.body);
         utils.encrypt(req.body.password, function (err, password) {
-            console.log('utils encrypt:', err, password);
-            neode.create('User', {
-                email: req.body.email,
-                password: password
-            })
-            .then(userData => {
-                console.log('New user with email:', userData.get('email'), 'is now registered on AMOS!');
+            if(err) {
                 responseData = {
                     'success': true,
-                    'statusCode': 201,
-                    'data': {
-                        'email': userData.get('email')
-                    },
-                    'errors': null,
-                    'message': 'New user successfully registered!'
+                    'statusCode': 400,
+                    'data': null,
+                    'errors': err,
+                    'message': 'Encryption error! Please try again later!'
                 }
                 helper.sendResponse(responseData, res)
-            });
+            }
+            else {
+                console.log('utils encrypt:', err, password);
+                neode.create('User', {
+                    email: req.body.email,
+                    password: password,
+                    role: "user" // By default everybody's a user.
+                })
+                .then(userData => {
+                    console.log('New user with email:', userData.get('email'), 'is now registered on AMOS!');
+                    responseData = {
+                        'success': true,
+                        'statusCode': 201,
+                        'data': {
+                            'email': userData.get('email')
+                        },
+                        'errors': null,
+                        'message': 'New user successfully registered!'
+                    }
+                    helper.sendResponse(responseData, res)
+                })
+                .catch(() => {
+                    responseData = {
+                        'success': true,
+                        'statusCode': 400,
+                        'data': null,
+                        'errors': 'Could not create User',
+                        'message': 'Something went wrong while trying to create User!'
+                    }
+                    helper.sendResponse(responseData, res)
+                })
+            }
         })
     })
 
@@ -78,6 +101,16 @@ module.exports = function(neode) {
                 helper.sendResponse(responseData, res)
             })
         })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'Invalid Email!',
+                'message': 'User not found! Please hard refresh and try again!'
+            }
+            helper.sendResponse(responseData, res)
+        })
     })
 
     // Fetch Other user's data.
@@ -97,6 +130,16 @@ module.exports = function(neode) {
                 },
                 'errors': null,
                 'message': 'User data fetched successfully!'
+            }
+            helper.sendResponse(responseData, res)
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'User not found!',
+                'message': 'Something went wrong while trying to fetch User! Please re-login if this issue persists!'
             }
             helper.sendResponse(responseData, res)
         })
@@ -120,6 +163,16 @@ module.exports = function(neode) {
                 },
                 'errors': null,
                 'message': 'User data fetched successfully!'
+            }
+            helper.sendResponse(responseData, res)
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'User not found!',
+                'message': 'Something went wrong while trying to fetch User! Please re-login if this issue persists!'
             }
             helper.sendResponse(responseData, res)
         })
@@ -149,6 +202,26 @@ module.exports = function(neode) {
                 }
                 helper.sendResponse(responseData, res)
             })
+            .catch(() => {
+                responseData = {
+                    'success': true,
+                    'statusCode': 400,
+                    'data': null,
+                    'errors': 'Could not update User data!',
+                    'message': 'Something went wrong while trying to update User data! Please try again later!'
+                }
+                helper.sendResponse(responseData, res)
+            })
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'User not found!',
+                'message': 'Something went wrong while trying to fetch User! Please re-login if this issue persists!'
+            }
+            helper.sendResponse(responseData, res)
         })
     })
 
@@ -177,6 +250,26 @@ module.exports = function(neode) {
                 }
                 helper.sendResponse(responseData, res)
             })
+            .catch(() => {
+                responseData = {
+                    'success': true,
+                    'statusCode': 400,
+                    'data': null,
+                    'errors': 'Could not update User data!',
+                    'message': 'Something went wrong while trying to update User data! Please try again later!'
+                }
+                helper.sendResponse(responseData, res)
+            })
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'User not found!',
+                'message': 'Something went wrong while trying to fetch User! Please re-login if this issue persists!'
+            }
+            helper.sendResponse(responseData, res)
         })
     })
 
