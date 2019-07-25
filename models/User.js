@@ -26,6 +26,10 @@ module.exports = {
             scheme: ["http", "https"]
         }
     },
+    "role": {
+        type: "string",
+        allow: ["user", "admin"]
+    },
     "version":"number",
     "lastLogin":"datetime",
     "createdAt":"datetime",

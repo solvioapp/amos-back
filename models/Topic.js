@@ -14,6 +14,15 @@ module.exports = {
         eager: true,
         cascade: 'detach'
     },
+    "parent": {
+        type: "relationship",
+        target: "Topic",
+        relationship: "CHILD_OF",
+        direction: "in",
+        properties: {},
+        eager: true,
+        cascade: 'detach'
+    },
     "version":"number",
     "lastLogin":"datetime",
     "createdAt":"datetime",

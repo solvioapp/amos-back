@@ -31,9 +31,39 @@ module.exports = function(neode) {
                         'message': 'New topic successfully created!'
                     }
                     helper.sendResponse(responseData, res)
-                });
+                })
+                .catch(() => {
+                    responseData = {
+                        'success': true,
+                        'statusCode': 400,
+                        'data': null,
+                        'errors': 'Could not relate Topic to User',
+                        'message': 'Please contact admin with your topic!'
+                    }
+                    helper.sendResponse(responseData, res)
+                })
             })
-        });
+            .catch(() => {
+                responseData = {
+                    'success': true,
+                    'statusCode': 400,
+                    'data': null,
+                    'errors': 'Could not find User',
+                    'message': 'Something went wrong while trying to your data! Please re-login to continue!'
+                }
+                helper.sendResponse(responseData, res)
+            })
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'Could not create Topic',
+                'message': 'Something went wrong while trying to create Topic!'
+            }
+            helper.sendResponse(responseData, res)
+        })
     })
 
     // Fetch all topics.
@@ -46,8 +76,8 @@ module.exports = function(neode) {
                 allTopics = []
                 for (var i = 0; i < topics.length; i++) {
                     allTopics.push({
-                        'id': topics.get(0).get('id'),
-                        'name': topics.get(0).get('name')
+                        'id': topics.get(i).get('id'),
+                        'name': topics.get(i).get('name')
                     })
                 }
                 if (allTopics.length == topics.length) {
@@ -62,6 +92,26 @@ module.exports = function(neode) {
                     helper.sendResponse(responseData, res)
                 }
             }
+            else {
+                responseData = {
+                    'success': true,
+                    'statusCode': 400,
+                    'data': null,
+                    'errors': 'Not Found',
+                    'message': 'No Topic found!'
+                }
+                helper.sendResponse(responseData, res)
+            }
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'Could not fetch Topics',
+                'message': 'Something went wrong while trying to fetch all Topics!'
+            }
+            helper.sendResponse(responseData, res)
         })
     })
 
@@ -79,6 +129,16 @@ module.exports = function(neode) {
                 },
                 'errors': null,
                 'message': 'Topic data fetched successfully!'
+            }
+            helper.sendResponse(responseData, res)
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'Not Found',
+                'message': 'Something went wrong while fetch this specific Topic! Pelase try again later!'
             }
             helper.sendResponse(responseData, res)
         })
@@ -103,6 +163,16 @@ module.exports = function(neode) {
                 helper.sendResponse(responseData, res)
             })
         })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'Could not delete Topic',
+                'message': 'Something went wrong while delete to this Topic! Please refresh and try again!'
+            }
+            helper.sendResponse(responseData, res)
+        })
     })
 
     // Update topic by id.
@@ -126,6 +196,26 @@ module.exports = function(neode) {
                 }
                 helper.sendResponse(responseData, res)
             })
+            .catch(() => {
+                responseData = {
+                    'success': true,
+                    'statusCode': 400,
+                    'data': null,
+                    'errors': 'Could not update Topic data',
+                    'message': 'Something went wrong while trying to update Topic data!'
+                }
+                helper.sendResponse(responseData, res)
+            })
+        })
+        .catch(() => {
+            responseData = {
+                'success': true,
+                'statusCode': 400,
+                'data': null,
+                'errors': 'Could not fetch Topic',
+                'message': 'Something went wrong while finding your Topic! Please try again later!'
+            }
+            helper.sendResponse(responseData, res)
         })
     })
 

@@ -2,7 +2,7 @@
 
 ---
 
-Node : v12.2.0
+Node : `v12.2.0`
 
 ## Tools Used
 - Routing: [Express](https://expressjs.com/)
