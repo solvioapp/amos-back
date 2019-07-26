@@ -1,10 +1,12 @@
 # Amos Backend
 
 ---
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/solviofoundation/amos-back.svg)](https://github.com/solviofoundation/amos-back/releases)
+[![node](https://img.shields.io/badge/node-%3E%3D12.5.0-brightgreen.svg)](https://nodejs.org/download/release/v12.5.0/)
 [![dependencies Status](https://david-dm.org/solviofoundation/amos-back/status.svg)](https://david-dm.org/solviofoundation/amos-back)
 [![devDependencies Status](https://david-dm.org/solviofoundation/amos-back/dev-status.svg)](https://david-dm.org/solviofoundation/amos-back?type=dev)
 
-Node : `v12.2.0`
+[![Follow on Twitter](https://img.shields.io/twitter/follow/solvio_?style=social&logo=twitter)](https://twitter.com/intent/follow?screen_name=solvio_)
 
 ## Tools Used
 - Routing: [Express](https://expressjs.com/)
