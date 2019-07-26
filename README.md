@@ -1,10 +1,19 @@
 # Amos Backend
 
 ---
+[![node](https://img.shields.io/badge/node-%3E%3D12.5.0-brightgreen.svg)](https://nodejs.org/download/release/v12.5.0/)
 [![dependencies Status](https://david-dm.org/solviofoundation/amos-back/status.svg)](https://david-dm.org/solviofoundation/amos-back)
 [![devDependencies Status](https://david-dm.org/solviofoundation/amos-back/dev-status.svg)](https://david-dm.org/solviofoundation/amos-back?type=dev)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/solviofoundation/amos-back)
 
-Node : `v12.2.0`
+[![GitHub contributors](https://img.shields.io/github/contributors/solviofoundation/amos-back?color=%2400f&style=for-the-badge)](https://github.com/solviofoundation/amos-back/graphs/contributors)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/graphs/commit-activity)
+[![GitHub issues](https://img.shields.io/github/issues-raw/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/issues)
+[![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/issues?q=is%3Aissue+is%3Aclosed)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/pulls)
+[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/pulls?q=is%3Apr+is%3Aclosed)
+
+[![Follow on Twitter](https://img.shields.io/twitter/follow/solvio_?style=social&logo=twitter)](https://twitter.com/intent/follow?screen_name=solvio_)
 
 ## Tools Used
 - Routing: [Express](https://expressjs.com/)
@@ -36,7 +45,7 @@ node server.js
 
 #### Check out [solvio.org](http://solvio.org) for more info.
 
-## Contributors
+## [Contributors](https://github.com/solviofoundation/amos-back/graphs/contributors)
 
 - [Ani](https://github.com/anistark)
 - [Dom](https://github.com/dteiml)
