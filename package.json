@@ -1,45 +1,41 @@
 {
-  "name": "amos-back",
-  "version": "0.0.1",
-  "description": "Back-end for Amos",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "./node_modules/.bin/nodemon --exec babel-node src/index.js",
-    "build": "babel src -d build; cp .env build; cp src/schema.graphql build",
-    "now-build": "babel src -d build; cp .env build; cp src/schema.graphql build",
-    "start": "npm run build && node build/index.js",
-    "seedDb": "./node_modules/.bin/babel-node src/seed/seed-db.js"
-  },
-  "license": "Apache-2.0",
-  "dependencies": {
-    "apollo-boost": "^0.3.1",
-    "apollo-cache-inmemory": "^1.5.1",
-    "apollo-client": "^2.5.1",
-    "apollo-link-http": "^1.5.14",
-    "apollo-server": "^2.6.2",
-    "dotenv": "^7.0.0",
-    "graphql-tag": "^2.10.1",
-    "neo4j-driver": "^1.7.3",
-    "neo4j-graphql-js": "^2.6.3",
-    "node-fetch": "^2.3.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "husky": "^1.3.1",
-    "lint-staged": "^8.1.5",
-    "nodemon": "^1.18.11"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "amos-back",
+    "version": "1.0.0",
+    "description": "Amos Backend codebase",
+    "main": "server.js",
+    "scripts": {
+        "dev": "nodemon server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/solviofoundation/amos-back.git"
+    },
+    "keywords": [
+        "amos",
+        "backend",
+        "neode",
+        "neo4j",
+        "graph",
+        "cypher",
+        "ogm"
+    ],
+    "author": "Kumar Anirudha <anirudhastark@yahoo.com>",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/solviofoundation/amos-back/issues"
+    },
+    "homepage": "https://github.com/solviofoundation/amos-back#readme",
+    "dependencies": {
+        "bcrypt": "^3.0.6",
+        "body-parser": "^1.19.0",
+        "dotenv": "^8.0.0",
+        "express": "^4.15.3",
+        "express-session": "^1.15.6",
+        "jsonwebtoken": "^8.5.1",
+        "neode": "^0.2.3"
+    },
+    "devDependencies": {
+        "eslint": "^4.8.0"
     }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md,graphql": [
-      "prettier --write",
-      "git add"
-    ]
-  }
 }
