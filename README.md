@@ -1,6 +1,8 @@
 # Amos Backend
 
 ---
+[![dependencies Status](https://david-dm.org/solviofoundation/amos-back/status.svg)](https://david-dm.org/solviofoundation/amos-back)
+[![devDependencies Status](https://david-dm.org/solviofoundation/amos-back/dev-status.svg)](https://david-dm.org/solviofoundation/amos-back?type=dev)
 
 Node : `v12.2.0`
 
