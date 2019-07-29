@@ -7,7 +7,7 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/solviofoundation/amos-back)
 
 [![GitHub contributors](https://img.shields.io/github/contributors/solviofoundation/amos-back?color=%2400f&style=for-the-badge)](https://github.com/solviofoundation/amos-back/graphs/contributors)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/graphs/commit-activity)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/solviofoundation/amos-back?style=for-the-badge)
 [![GitHub issues](https://img.shields.io/github/issues-raw/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/issues)
 [![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/issues?q=is%3Aissue+is%3Aclosed)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/solviofoundation/amos-back?style=for-the-badge)](https://github.com/solviofoundation/amos-back/pulls)
@@ -19,6 +19,7 @@
 - Routing: [Express](https://expressjs.com/)
 - Database: [Neo4j](https://neo4j.com/)
 - Object Mapper: [Neode](https://github.com/adam-cowley/neode)
+- API design: REST
 
 ### Run Neo4j
 We are using docker. You can setup using whatever you feel comfortable in.
