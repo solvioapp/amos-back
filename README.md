@@ -19,6 +19,7 @@
 - Routing: [Express](https://expressjs.com/)
 - Database: [Neo4j](https://neo4j.com/)
 - Object Mapper: [Neode](https://github.com/adam-cowley/neode)
+- API design: REST
 
 ### Run Neo4j
 We are using docker. You can setup using whatever you feel comfortable in.
