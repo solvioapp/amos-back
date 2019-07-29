@@ -146,7 +146,6 @@ module.exports = function(neode) {
     })
 
     // Fetch Other user's data.
-    // Should be allowed only to admin.
     router.get('/:userId', helper.checkAuth, function (req, res) {
         responseData = {}
         neode.first('User', 'id', req.params.userId)
@@ -183,6 +182,13 @@ module.exports = function(neode) {
         responseData = {}
         neode.first('User', 'id', req.authorised)
         .then(user => {
+            // Email, role update not allowed here. Contact admin to do it.
+            if ('email' in req.body) {
+                delete req.body['email'];
+            }
+            if ('role' in req.body) {
+                delete req.body['role'];
+            }
             req.body.id = req.authorised
             user.update(req.body)
             .then(updatedUser => {
@@ -227,7 +233,7 @@ module.exports = function(neode) {
 
     // Update other user's data.
     // Should be allowed only to admin.
-    router.put('/:userId', helper.checkAuth, function (req, res) {
+    router.put('/:userId', helper.checkAuth, helper.checkAccess, function (req, res) {
         responseData = {}
         neode.first('User', 'id', req.params.userId)
         .then(user => {

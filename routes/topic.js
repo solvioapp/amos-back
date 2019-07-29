@@ -6,7 +6,7 @@ module.exports = function(neode) {
 
     // create new Topic.
     // Should be allowed only to admin for now.
-    router.post('/', helper.checkAuth, function (req, res) {
+    router.post('/', helper.checkAuth, helper.checkAccess, function (req, res) {
         responseData = {}
         neode.create('Topic', {
             name: req.body.name
@@ -145,6 +145,7 @@ module.exports = function(neode) {
     })
 
     // Delete topic by id.
+    // Todo: Soft delete
     router.delete('/:topicId', helper.checkAuth, function (req, res) {
         responseData = {}
         neode.first('Topic', 'id', req.params.topicId)
