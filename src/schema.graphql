@@ -1,3 +1,7 @@
+enum Role {
+  user
+  admin
+}
 type User {
   id: ID!
   email: String!
@@ -33,7 +37,7 @@ type Query {
     @cypher(
       statement: "MATCH (u:User {id: $user}) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
     )
-  users: [User!]
+  users: [User!] @hasRole(roles:[admin])
     @cypher(
       statement: "MATCH (u:User) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
     )
