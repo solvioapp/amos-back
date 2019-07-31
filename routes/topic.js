@@ -2,11 +2,19 @@ module.exports = function(neode) {
     const router = require('express').Router();
     var utils = require('../utils');
     var helper = require('../helper');
+    var createTopicSchema = require('../joi-schemas/topic/createTopic')
+    var updateTopicSchema = require('../joi-schemas/topic/updateTopicSchema')
     // var moment = require('moment');
+
+    const validator = require('express-joi-validation').createValidator({
+        // You can pass a specific Joi instance using this option. By default the
+        // module will load the @hapi/joi version you have in your package.json
+        // joi: require('@hapi/joi')
+      })
 
     // create new Topic.
     // Should be allowed only to admin for now.
-    router.post('/', helper.checkAuth, function (req, res) {
+    router.post('/', validator.body(createTopicSchema), helper.checkAuth, function (req, res) {
         responseData = {}
         neode.create('Topic', {
             name: req.body.name
@@ -176,7 +184,7 @@ module.exports = function(neode) {
     })
 
     // Update topic by id.
-    router.put('/:topicId', helper.checkAuth, function (req, res) {
+    router.put('/:topicId', validator.body(updateTopicSchema), helper.checkAuth, function (req, res) {
         responseData = {}
         neode.first('Topic', 'id', req.params.topicId)
         .then(topic => {
