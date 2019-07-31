@@ -2,9 +2,19 @@ module.exports = function(neode) {
     const router = require('express').Router();
     var utils = require('../utils');
     var helper = require('../helper');
+    var createUserSchema = require('../joi-schemas/user/createUser')
+    var loginSchema = require('../joi-schemas/user/loginSchema')
+    var userByIdSchema = require('../joi-schemas/user/userByIdSchema')
+    var updateUserSchema = require('../joi-schemas/user/updateUserSchema')
+
+    const validator = require('express-joi-validation').createValidator({
+        // You can pass a specific Joi instance using this option. By default the
+        // module will load the @hapi/joi version you have in your package.json
+        // joi: require('@hapi/joi')
+      })
 
     // register new User account.
-    router.post('/', function (req, res) {
+    router.post('/',validator.body(createUserSchema), function (req, res) {
         responseData = {}
         console.log('body:', req.body);
         utils.encrypt(req.body.password, function (err, password) {
@@ -53,7 +63,7 @@ module.exports = function(neode) {
     })
 
     // User Login.
-    router.post('/login', function (req, res) {
+    router.post('/login', validator.body(loginSchema), function (req, res) {
         responseData = {}
         // Get User with req.body.email and passwordCheck
         neode.first('User', 'email', req.body.email)
@@ -147,7 +157,7 @@ module.exports = function(neode) {
 
     // Fetch Other user's data.
     // Should be allowed only to admin.
-    router.get('/:userId', helper.checkAuth, function (req, res) {
+    router.get('/:userId',validator.params(userByIdSchema), helper.checkAuth, function (req, res) {
         responseData = {}
         neode.first('User', 'id', req.params.userId)
         .then(user => {
@@ -179,7 +189,7 @@ module.exports = function(neode) {
     })
 
     // Update user's own data.
-    router.put('/', helper.checkAuth, function (req, res) {
+    router.put('/',validator.body(updateUserSchema), helper.checkAuth, function (req, res) {
         responseData = {}
         neode.first('User', 'id', req.authorised)
         .then(user => {
@@ -227,7 +237,7 @@ module.exports = function(neode) {
 
     // Update other user's data.
     // Should be allowed only to admin.
-    router.put('/:userId', helper.checkAuth, function (req, res) {
+    router.put('/:userId',validator.body(updateUserSchema), helper.checkAuth, function (req, res) {
         responseData = {}
         neode.first('User', 'id', req.params.userId)
         .then(user => {
