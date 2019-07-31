@@ -5,8 +5,8 @@ module.exports = function(neode) {
     var passport = require('passport')
     , FacebookStrategy = require('passport-facebook').Strategy;
     passport.use(new FacebookStrategy({
-        clientID: 480063456075536,
-        clientSecret: 'b817e8de9f3ae3de77c82802e2797638',
+        clientID: 'ID',
+        clientSecret: 'SECRET',
         callbackURL: "http://localhost:3000/api/v1/auth/facebook/callback"
       },
       function(accessToken, refreshToken, profile, done) {
