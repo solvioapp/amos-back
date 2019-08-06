@@ -11,7 +11,7 @@ module.exports = function(neode) {
         let amosGameRequestData = {
             type : req.body.type
         }
-        if (req.body.type == 2) {
+        if (req.body.type == 'learning_dependency') {
             amosGameRequestData.strength = req.body.strength
             amosGameRequestData.level = req.body.level
         }
