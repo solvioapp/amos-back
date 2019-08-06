@@ -24,7 +24,6 @@ module.exports = {
         cascade: 'detach'
     },
     "version":"number",
-    "lastLogin":"datetime",
     "createdAt":"datetime",
     "updatedAt":"datetime"
 };

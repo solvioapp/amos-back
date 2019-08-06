@@ -7,7 +7,6 @@ module.exports = {
     "link":"string",
     "title":"string",
     "version":"number",
-    "lastLogin":"datetime",
     "createdAt":"datetime",
     "updatedAt":"datetime"
 };

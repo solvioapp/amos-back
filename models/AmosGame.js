@@ -37,7 +37,6 @@ module.exports = {
         allow: ['beginner', 'intermediate', 'expert']
     },
     "version":"number",
-    "lastLogin":"datetime",
     "createdAt":"datetime",
     "updatedAt":"datetime"
 };
