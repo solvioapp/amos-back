@@ -10,7 +10,9 @@ module.exports = {
         target: "User",
         relationship: "CREATED_BY",
         direction: "in",
-        properties: {},
+        properties: {
+            id: "uuid"
+        },
         eager: true,
         cascade: 'detach'
     },
@@ -19,7 +21,9 @@ module.exports = {
         target: "Topic",
         relationship: "CHILD_OF",
         direction: "in",
-        properties: {},
+        properties: {
+            id: 'uuid'
+        },
         eager: true,
         cascade: 'detach'
     },

@@ -17,7 +17,7 @@ module.exports = function(neode) {
                 // var time = moment();
                 // var time_format = time.format('YYYY-MM-DD HH:mm:ss Z');
                 // console.log('time_format:', time_format);
-                topicData.relateTo(user, 'createdBy')
+                topicData.relateTo(user, 'createdBy', {id: user.get('id')})
                 .then(rel => {
                     // console.log('rel:', rel);
                     responseData = {
@@ -120,19 +120,33 @@ module.exports = function(neode) {
         responseData = {}
         neode.first('Topic', 'id', req.params.topicId)
         .then(topicData => {
-            responseData = {
-                'success': true,
-                'statusCode': 200,
-                'data': {
-                    'id': topicData.get('id'),
-                    'name': topicData.get('name')
-                },
-                'errors': null,
-                'message': 'Topic data fetched successfully!'
-            }
-            helper.sendResponse(responseData, res)
+            // console.log('topicData:', topicData);
+            let user = topicData.get('createdBy');
+            neode.first('User', 'id', user.get('id'))
+            .then(userData => {
+                userFinalData = {
+                    'email': userData.get('email'),
+                    'firstName': userData.get('firstName'),
+                    'lastName': userData.get('lastName'),
+                    'username': userData.get('username'),
+                    'profileImageUrl': userData.get('profileImageUrl')
+                }
+                responseData = {
+                    'success': true,
+                    'statusCode': 200,
+                    'data': {
+                        'id': topicData.get('id'),
+                        'name': topicData.get('name'),
+                        'createdBy': userFinalData
+                    },
+                    'errors': null,
+                    'message': 'Topic data fetched successfully!'
+                }
+                helper.sendResponse(responseData, res)
+            })
         })
-        .catch(() => {
+        .catch((err) => {
+            console.log('err:', err);
             responseData = {
                 'success': true,
                 'statusCode': 400,
