@@ -21,7 +21,7 @@ module.exports = function(neode) {
         .then(resource => {
             neode.create('AmosGame', amosGameRequestData)
             .then(amosGameData => {
-                amosGameData.relateTo(resource, 'resource')
+                amosGameData.relateTo(resource, 'resource', {id: resource.get('id')})
                 .then(rel => {
                     // console.log('rel:', rel);
                     // Todo: Decide weather to put a default by the user who added the resource.

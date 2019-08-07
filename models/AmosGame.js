@@ -9,7 +9,9 @@ module.exports = {
         target: "Resource",
         relationship: "FOR",
         direction: "out",
-        properties: {},
+        properties: {
+            id: 'uuid'
+        },
         eager: true,
         cascade: 'detach'
     },
