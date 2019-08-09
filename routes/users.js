@@ -76,16 +76,36 @@ module.exports = function(neode) {
                             'email': user.get('email')
                         }
                         utils.generateAuthToken(user.get('id'), function (tokenErr, token) {
-                            responseData = {
-                                'success': true,
-                                'statusCode': 200,
-                                'data': {
-                                    'user': userData,
-                                    'X-Auth-Token': token
-                                },
-                                'errors': null,
-                                'message': 'User data fetched successfully!'
-                            }
+                            console.log('datetime:', new Date());
+                            user.update({
+                                id: user.get('id'),
+                                lastLogin: new Date()
+                            })
+                            .then(updatedUser => {
+                                responseData = {
+                                    'success': true,
+                                    'statusCode': 200,
+                                    'data': {
+                                        'user': updatedUser,
+                                        'X-Auth-Token': token
+                                    },
+                                    'errors': null,
+                                    'message': 'User data fetched successfully!'
+                                }
+                                helper.sendResponse(responseData, res)
+                            })
+                            .catch((e) => {
+                                console.log('e:', e);
+                                // console.log('err name:', e.name, e.details[0].message);
+                                responseData = {
+                                    'success': true,
+                                    'statusCode': 400,
+                                    'data': null,
+                                    'errors': 'Could not update User data!',
+                                    'message': 'Something went wrong while trying to update User data! Please try again later!'
+                                }
+                                helper.sendResponse(responseData, res)
+                            })
                         })
                     }
                     else {
@@ -96,9 +116,10 @@ module.exports = function(neode) {
                             'errors': passErr,
                             'message': 'Password Mismatch!'
                         }
+                        helper.sendResponse(responseData, res)
                     }
                 }
-                helper.sendResponse(responseData, res)
+                // helper.sendResponse(responseData, res)
             })
         })
         .catch(() => {
@@ -190,6 +211,7 @@ module.exports = function(neode) {
                 delete req.body['role'];
             }
             req.body.id = req.authorised
+            req.body.updatedAt = new Date()
             user.update(req.body)
             .then(updatedUser => {
                 // console.log('updatedUser:', updatedUser);
