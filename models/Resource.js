@@ -6,7 +6,16 @@ module.exports = {
     },
     "link":"string",
     "title":"string",
-    "version":"number",
-    "createdAt":"datetime",
-    "updatedAt":"datetime"
+    "version":{
+        type: "number",
+        default: 1
+    },
+    "createdAt":{
+        type: "datetime",
+        default: () => new Date()
+    },
+    "updatedAt": {
+        type: "datetime",
+        default: () => new Date()
+    }
 };

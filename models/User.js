@@ -30,8 +30,19 @@ module.exports = {
         type: "string",
         allow: ["user", "admin"]
     },
-    "version":"number",
-    "lastLogin":"datetime",
-    "createdAt":"datetime",
-    "updatedAt":"datetime"
+    "version":{
+        type: "number",
+        default: 1
+    },
+    "lastLogin":{
+        type: "datetime"
+    },
+    "createdAt":{
+        type: "datetime",
+        default: () => new Date()
+    },
+    "updatedAt": {
+        type: "datetime",
+        default: () => new Date()
+    }
 };
