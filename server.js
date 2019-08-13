@@ -41,6 +41,7 @@ app.use('/api/v1/amosgame', require('./routes/amosGame')(neode))
 /**
  * Listen for requests on port 3000
  */
-app.listen(3000, function () {
-    console.log('Amos:: listening on http://localhost:3000'); // eslint-disable-line no-console
+let PORT = process.env.SERVER_PORT || 3000
+app.listen(PORT, function () {
+    console.log('Amos:: listening on http://localhost:'+PORT); // eslint-disable-line no-console
 });
