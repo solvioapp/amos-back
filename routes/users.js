@@ -75,55 +75,55 @@ module.exports = function(neode) {
                         userData = {
                             'email': user.get('email')
                         }
-                        // utils.generateAuthToken(user.get('id'), function (tokenErr, token) {
-                        //     console.log('datetime:', new Date());
-                        //     user.update({
-                        //         id: user.get('id'),
-                        //         lastLogin: new Date()
-                        //     })
-                        //     .then(updatedUser => {
-                        //         responseData = {
-                        //             'success': true,
-                        //             'statusCode': 200,
-                        //             'data': {
-                        //                 'user': updatedUser,
-                        //                 'X-Auth-Token': token
-                        //             },
-                        //             'errors': null,
-                        //             'message': 'User data fetched successfully!'
-                        //         }
-                        //         helper.sendResponse(responseData, res)
-                        //     })
-                        //     .catch((e) => {
-                        //         console.log('e:', e);
-                        //         // console.log('err name:', e.name, e.details[0].message);
-                        //         responseData = {
-                        //             'success': true,
-                        //             'statusCode': 400,
-                        //             'data': null,
-                        //             'errors': 'Could not update User data!',
-                        //             'message': 'Something went wrong while trying to update User data! Please try again later!'
-                        //         }
-                        //         helper.sendResponse(responseData, res)
-                        //     })
-                        // })
-                        responseData = {
-                            'success': true,
-                            'statusCode': 200,
-                            'data': {
-                                'user': {
-                                    'email': user.get('email'),
-                                    'firstName': user.get('firstName'),
-                                    'lastName': user.get('lastName'),
-                                    'username': user.get('username'),
-                                    'profileImageUrl': user.get('profileImageUrl')
+                        utils.generateAuthToken(user.get('id'), function (tokenErr, token) {
+                            // console.log('datetime:', new Date());
+                            responseData = {
+                                'success': true,
+                                'statusCode': 200,
+                                'data': {
+                                    'user': {
+                                        'email': user.get('email'),
+                                        'firstName': user.get('firstName'),
+                                        'lastName': user.get('lastName'),
+                                        'username': user.get('username'),
+                                        'profileImageUrl': user.get('profileImageUrl')
+                                    },
+                                    'X-Auth-Token': token
                                 },
-                                'X-Auth-Token': token
-                            },
-                            'errors': null,
-                            'message': 'User data fetched successfully!'
-                        }
-                        helper.sendResponse(responseData, res)
+                                'errors': null,
+                                'message': 'User data fetched successfully!'
+                            }
+                            helper.sendResponse(responseData, res)
+                            // user.update({
+                            //     id: user.get('id'),
+                            //     lastLogin: new Date()
+                            // })
+                            // .then(updatedUser => {
+                            //     responseData = {
+                            //         'success': true,
+                            //         'statusCode': 200,
+                            //         'data': {
+                            //             'user': updatedUser,
+                            //             'X-Auth-Token': token
+                            //         },
+                            //         'errors': null,
+                            //         'message': 'User data fetched successfully!'
+                            //     }
+                            //     helper.sendResponse(responseData, res)
+                            // })
+                            // .catch((e) => {
+                            //     console.log('e:', e);
+                            //     // console.log('err name:', e.name, e.details[0].message);
+                            //     responseData = {
+                            //         'success': true,
+                            //         'statusCode': 400,
+                            //         'data': null,
+                            //         'errors': 'Could not update User data!',
+                            //         'message': 'Something went wrong while trying to update User data! Please try again later!'
+                            //     }
+                            //     helper.sendResponse(responseData, res)
+                            // })
+                        })
                     }
                     else {
                         responseData = {
