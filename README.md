@@ -46,11 +46,13 @@ node server.js
 
 #### Check out [solvio.org](http://solvio.org) for more info.
 
-## [Contributors](https://github.com/solviofoundation/amos-back/graphs/contributors)
+### Maintainers
 
 - [Ani](https://github.com/anistark)
 - [Dom](https://github.com/dteiml)
 - [Mukul](https://github.com/developerKumar)
+
+### [Contributors](https://github.com/solviofoundation/amos-back/graphs/contributors)
 
 ## Resources references
 
