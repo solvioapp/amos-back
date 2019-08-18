@@ -1,6 +1,14 @@
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 var jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
+var aws = require('aws-sdk');
+
+aws.config.update({
+    accessKeyId: '',
+    secretAccessKey: '',
+    region: ''
+});
 
 module.exports = {
 
@@ -42,6 +50,36 @@ module.exports = {
             cb(null, decoded.data)
         } catch (err) {
             cb(err)
+        }
+    },
+
+    sendEmail: function () {
+        try {
+            // create Nodemailer SES transporter
+            let transporter = nodemailer.createTransport({
+                SES: new aws.SES({
+                    apiVersion: '2010-12-01'
+                })
+            });
+
+            // send some mail
+            transporter.sendMail({
+                from: 'sender@example.com',
+                to: 'recipient@example.com',
+                subject: 'Message',
+                text: 'I hope this message gets sent!',
+                ses: {
+                    Tags: [{
+                        Name: 'tag name',
+                        Value: 'tag value'
+                    }]
+                }
+            }, (err, info) => {
+                console.log(info.envelope);
+                console.log(info.messageId);
+            });
+        } catch (e) {
+            console.log('err in sending mail:', e);
         }
     }
 
