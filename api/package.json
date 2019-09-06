@@ -2,11 +2,11 @@
   "name": "amos-api",
   "version": "0.1.0",
   "description": "Amos API",
-  "main": "index.js",
+  "main": "src/index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/solviofoundation/amos/tree/master/api"
+    "url": "https://github.com/solviofoundation/amos-back/tree/master/api"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,6 +30,9 @@
     "ramda": "^0.26.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "husky": "^3.0.5",
     "nodemon": "^1.19.1"
   }
