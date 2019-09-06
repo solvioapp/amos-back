@@ -1,0 +1,36 @@
+{
+  "name": "amos-api",
+  "version": "0.1.0",
+  "description": "Amos API",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solviofoundation/amos/tree/master/api"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "./node_modules/.bin/nodemon --watch . --ext js,graphql --exec babel-node  index.js",
+    "build": "babel . -d build; cp .env build; cp schema.graphql build",
+    "start": "npm run build && node build/index.js",
+    "seedDb": "./node_modules/.bin/babel-node seed/seed-db.js"
+  },
+  "dependencies": {
+    "apollo-boost": "^0.3.1",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link-http": "^1.5.15",
+    "apollo-server": "^2.8.2",
+    "bcrypt": "^3.0.6",
+    "dotenv": "^8.1.0",
+    "graphql-tag": "^2.10.1",
+    "neo4j-driver": "^1.7.5",
+    "neo4j-graphql-js": "^2.7.1",
+    "node-fetch": "^2.6.0",
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "husky": "^3.0.5",
+    "nodemon": "^1.19.1"
+  }
+}
