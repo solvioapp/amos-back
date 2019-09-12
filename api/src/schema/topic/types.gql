@@ -1,0 +1,9 @@
+type Topic @hasRole (roles: [admin]) {
+  name: String!
+  parents: [IS_PART_OF!]!
+}
+
+type IS_PART_OF @relation (name: "IS_PART_OF") {
+  from: Topic!
+  to: Topic!
+}

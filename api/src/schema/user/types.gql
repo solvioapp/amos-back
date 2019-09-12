@@ -1,0 +1,42 @@
+enum Role {
+  user
+  admin
+}
+
+type User {
+  id: ID!
+  email: String!
+  createdAt: DateTime!
+  votes: [VOTED_BY!]!
+}
+
+extend type Query {
+  currentUser: User
+    @cypher(
+      statement: "MATCH (u:User {id: $user}) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+  users: [User!] @hasRole (roles: [admin])
+    @cypher(
+      statement: "MATCH (u:User) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+  user(id: ID!): User
+    @cypher(
+      statement: "MATCH (u:User) WHERE u.id = $id WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
+    )
+}
+
+extend type Mutation {
+  CreateUser(email: String!, password: String!, username: String!, firstName: String!, lastName: String!, reputation: Int!): String
+    @cypher(
+      statement: "CALL apoc.create.uuids(1) YIELD uuid CREATE (l:LOCAL_ACCOUNT {password: $password, email: $email})<-[:AUTHENTICATED_WITH]-(u:User {email: $email, username: $username, id: uuid}) RETURN u"
+    )
+  Login(email: String!, password: String!): String
+    @cypher(
+      statement: "MATCH (u:User {email: $email})-[:AUTHENTICATED_WITH]->(l:LOCAL_ACCOUNT {email: $email}) WITH { username: u.username, id: u.id, password: l.password} as LoginInfo RETURN LoginInfo"
+    )
+  UpdateUser(id: ID!, firstName: String!, lastName: String!): User!
+  UpdatePassword(email:String!, password: String!, currentPassword: String!): String!
+    @cypher(
+      statement: "MATCH (la:LOCAL_ACCOUNT{email: $email}) SET la+= {password:$password} RETURN la AS LOCAL_ACCOUNT"
+    )
+}

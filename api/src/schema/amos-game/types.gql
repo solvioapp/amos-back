@@ -1,0 +1,16 @@
+type AmosGame {
+  id: ID!
+  resource: FOR_RESOURCE!
+  votes: VOTED_BY!
+}
+
+type FOR_RESOURCE @relation(name: "FOR_RESOURCE") {
+  from: AmosGame!
+  to: Resource!
+}
+
+type VOTED_BY @relation(name: "VOTED_BY") {
+  from: AmosGame!
+  to: User!
+  timestamp: DateTime!
+}

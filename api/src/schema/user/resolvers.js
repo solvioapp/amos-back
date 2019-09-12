@@ -1,19 +1,12 @@
-import {
-  neo4jgraphql
-} from "neo4j-graphql-js";
-import bcrypt from "bcrypt";
-import {
-  isNil
-} from "lodash";
+import {neo4jgraphql} from "neo4j-graphql-js"
+import bcrypt from "bcrypt"
 
-import {
-  createToken
-} from "./auth/auth";
+import {createToken} from "../auth/auth"
 
-export const resolvers = {
+const resolvers = {
   Mutation: {
     CreateUser: async (object, params, context, resolveInfo) => {
-      const user = params;
+      const user = params
 
       // Check if user exist already with email
       const session = context.driver.session()
@@ -43,18 +36,8 @@ export const resolvers = {
       }
 
     },
-    Login: async (object, {
-      email,
-      password
-    }, context, resolveInfo) => {
-      const user = await neo4jgraphql(
-        object, {
-          email,
-          password
-        },
-        context,
-        resolveInfo
-      );
+    Login: async (object, {email, password}, context, resolveInfo) => {
+      const user = await neo4jgraphql(object, {email, password}, context, resolveInfo);
       if (!user) {
         throw new Error("No user with that email");
         return null;
@@ -167,4 +150,6 @@ export const resolvers = {
       return neo4jgraphql(object, params, context, resolveInfo, true);
     },
   }
-};
+}
+
+export default resolvers

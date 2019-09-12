@@ -3,16 +3,14 @@
     "@babel/preset-env",
   ],
   "plugins": [
-    // Plugin by others
-    // "require-context-hook",
-    // Plugins by @babel
     // "@babel/proposal-object-rest-spread",
-    // ["@babel/plugin-proposal-pipeline-operator", { "proposal": "smart" }],
+    ["@babel/plugin-proposal-pipeline-operator", { "proposal": "smart" }],
     // "@babel/plugin-transform-runtime",
     // "@babel/plugin-proposal-class-properties",
     // "@babel/plugin-proposal-private-methods",
-    // "@babel/plugin-proposal-optional-chaining",
+    "require-context-hook",
+    "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-proposal-throw-expressions",
   ],
-  // "sourceMaps": "inline",
-  // "retainLines": true,
+  "sourceMaps": true,
 }

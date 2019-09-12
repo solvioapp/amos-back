@@ -1,0 +1,12 @@
+scalar Date
+scalar StringList
+scalar Time
+
+type Response {
+  success: Boolean!
+  message: StringList
+}
+
+type Query
+
+type Mutation

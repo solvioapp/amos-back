@@ -1,0 +1,12 @@
+type Resource {
+  name: String
+  urls: [String!]!
+  createdBy: RESOURCE_CREATED_BY!
+  amosGames: [FOR_RESOURCE!]!
+}
+
+type RESOURCE_CREATED_BY @relation(name: "RESOURCE_CREATED_BY") {
+  from: Resource!
+  to: User!
+  timestamp: DateTime!
+}
