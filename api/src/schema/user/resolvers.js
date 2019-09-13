@@ -1,180 +1,99 @@
-import {R} from '../../common'
+import {H,R} from '../../common'
 import {neo4jgraphql} from 'neo4j-graphql-js'
 import bcrypt from 'bcrypt'
 
 import {createToken} from '../../auth/auth'
 
-const resolvers = {
-  Mutation: {
-    CreateUser: async (_, {email, password}, {driver}) => {
+export default {
+  Query: {
+    Login: async (_, {email, password}, {driver}) => {
+      /* Setup */
+      const ses = driver.session()
+      const _1 = 
+      `MATCH (u:User {email: $email})
+      -[:AUTHENTICATED_WITH]->
+      (l:LOCAL_ACCOUNT {email: $email}) 
+      RETURN l.hashedPassword as hashedPassword`
+
+      /* Get user's hashed password */
+      const {records: recs} = await ses.run (_1, {email})
+
       /* Check if user exists */
+      H.assert (H.isNotEmpty (recs)) (`no user with that email`)
+
+      /* Check if password is correct */
+      H.assert (bcrypt.compare(password, recs[0].get (`hashedPassword`))) (`incorrect password`)
+
+      /* Grant jwt */
+      return await createToken({user: {email}}, process.env.JWT_SECRET)
+    },
+    currentUser: async (_, __, {driver, user}) => {
+      /* Setup */
+      const ses = driver.session()
+
+      /* Check request is authenticated */
+      H.assert (H.isNotNil (user?.id)) (`authentication required`)
+
+      const _1 =
+      `MATCH (u:User {id: $id})
+      WITH {email: u.email} as u
+      RETURN u`
+
+      const {records: recs} = await ses.run (_1, {id: user?.id})
+
+      recs |> console.log('recs', #)
+      
+      return recs[0].get(`u`)
+    },
+  },
+  Mutation: {
+    Signup: async (_, {email, password}, {driver}) => {
+      /* Setup */
       const ses = driver.session()
       const _1 = 
       `MATCH (u:User) WHERE u.email = $email RETURN u`
-      const res = await ses.run (_1, {email})
-      R.length (res.records) > 0
-        ? throw new Error(`ERROR: a user with email "${email}" already exists.`)
-        : null
 
-      /* Save user */
+      /* Check if user exists */
+      const {records: recs} = await ses.run (_1, {email})      
+      H.assert (R.isEmpty (recs)) (`a user with email ${email} already exists.`)
+
+      /* Hash password */
       const hashedPassword = await bcrypt.hash(password, 12)
       const _2 = 
       `CREATE (u:User {email: $email})
       -[:AUTHENTICATED_WITH]->
       (l:LOCAL_ACCOUNT {hashedPassword: $hashedPassword, email: $email})
       RETURN u`
+
+      /* Save user to db! */
       await ses.run (_2, {email, hashedPassword})
+
+      /* Grant jwt */
       return await createToken({user: {email}}, process.env.JWT_SECRET)
     },
-    Login: async (_, {email, password}, {driver}, resolveInfo) => {
-      const q = 
-      `MATCH (u:User {email: $email})
-      -[:AUTHENTICATED_WITH]->
-      (l:LOCAL_ACCOUNT {email: $email}) 
-      RETURN l.hashedPassword as hashedPassword`
-
+    UpdatePassword: async (_, {email, password, _new}, {driver, user}) => {
+      /* Setup */
       const ses = driver.session()
-      const res = await ses.run (q, {email})
-      const rec = res.records[0]
-      const obj = Object.getOwnPropertyNames(rec)
-      obj |> console.log('obj', #)
-      const r = R.keys (rec)
-      r |> console.log('r', #)
-      const keys = Object.keys(rec)
-      keys |> console.log('keys', #)
-      rec.keys |> console.log('rec.keys', #)
-      rec.length |> console.log('rec.length', #)
-      rec._fields |> console.log('rec._fields', #)
-      rec._fieldLookup |> console.log('rec._fieldLookup', #)
-      // rec.get(`hashPassword`) |> console.log('rec.get(`hashPassword`)', #)
-      const p = rec.__proto__
-      p |> console.log('p', #)
 
-      const obj2 = Object.getOwnPropertyNames(p)
-      
-      obj2 |> console.log('obj2', #)
+      /* Check request is authenticated */
+      H.assert (H.isNotNil (user?.id)) (`authentication required`)
 
-      rec.toObject() |> console.log('rec.toObject()', #)
+      /* Check current password is correct */
+      const _1 = 
+      `MATCH (la:LOCAL_ACCOUNT)
+      WHERE la.email = $email
+      RETURN la`
+      const {records: recs} = await ses.run(_1, {email})
+      H.assert (H.isNotEmpty (recs)) (`no user with that email`)
+      H.assert (bcrypt.compare(password, recs[0].get (`hashedPassowrd`))) (`incorrect password`)
 
-      rec.forEach(console.log) |> console.log('rec.forEach(console.log)', #)
-
-      rec.has(`hashPassword`) |> console.log('rec.has(`hashPassword`)', #)
-      
-      const prototype = rec.prototype
-      prototype |> console.log('prototype', #)
-      // const user = await neo4jgraphql(object, {email, password}, context, resolveInfo);
-      if (!user) {
-        throw new Error("No user with that email");
-        return null;
-      }
-
-      const valid = await bcrypt.compare(password, user.password);
-      if (!valid) {
-        throw new Error("Incorrect password");
-        return null;
-      }
-
-      const signedToken = await createToken({
-          user: {
-            id: user.id,
-            username: user.username,
-            email
-          }
-        },
-        context.SECRET
-      );
-
-      return `${signedToken}`;
-    },
-    UpdateUser: async (object, params, context, resolveInfo) => {
-      if (isNil(context.user && context.user.id)) {
-        throw new Error('Authentication required!')
-        return null;
-      }
-      const updatedUSer = await neo4jgraphql(object, params, context, resolveInfo, true);
-      return updatedUSer
-    },
-    UpdatePassword: async (object, params, context, resolveInfo) => {
-      if (isNil(context.user && context.user.id)) {
-        throw new Error('Authentication required!')
-        return null;
-      }
-      const {
-        password,
-        currentPassword,
-        email
-      } = params;
-
-
-      // Get password for current Email
-      const session = context.driver.session()
-      let query = 'Match (la:LOCAL_ACCOUNT) WHERE la.email = $email RETURN la;'
-      const userLA = await session.run(query, params).then(result => {
-        return result.records.map(record => {
-          return record.get('la').properties
-        })
-      })
-
-      if (userLA.length > 0) {
-        // Compare it
-        const valid = await bcrypt.compare(currentPassword, userLA[0].password);
-        console.log(valid, userLA[0].password, currentPassword)
-        // if currentPassword entered & fetched one is same
-        // Update Password
-        if (valid) {
-          params.password = await bcrypt.hash(password, 12);
-          const updatedUser = await neo4jgraphql(object, params, context, resolveInfo, true);
-          return 'Password Updated successfully!'
-        }
-        // Else throw error :D
-        else {
-          throw new Error('Password update failed!')
-        }
-      } else {
-        throw new Error('Password update failed! No user found!')
-      }
-      
-
+      /* Save new password */
+      const hashedNew = await bcrypt.hash (_new, 12)
+      const _2 =
+      `MATCH (la:LOCAL_ACCOUNT {email: $email})
+      SET la+= {hashedPassword: hashedNew}
+      RETURN la`
+      await ses.run (_2, {email, hashedNew})
     },
   },
-  Query: {
-    currentUser: async (object, params, context, resolveInfo) => {
-
-      //   Here check if user authenticated
-      if (isNil(context.user && context.user.id)) {
-        throw new Error('Authentication required!')
-        return null;
-      }
-      const userID = context.user.id;
-
-      const {
-        id,
-        email,
-        username
-      } = await neo4jgraphql(
-        object, {
-          user: userID
-        },
-        context,
-        resolveInfo
-      );
-
-      return {
-        id,
-        email,
-        username
-      };
-    },
-    user: async (object, params, context, resolveInfo) => {
-
-      //   Here check if user authenticated
-      if (isNil(context.user && context.user.id)) {
-        throw new Error('Authentication required!')
-        return null;
-      }
-      return neo4jgraphql(object, params, context, resolveInfo, true);
-    },
-  }
 }
-
-export default resolvers

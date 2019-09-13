@@ -9,6 +9,20 @@ export const read = dir => file => fs.readFileSync(path.join(dir, file), {encodi
 
 export const mergeDeepAll = R.reduce (R.mergeDeepRight) ({})
 
+/**
+ * @description 
+ * @example 
+ */
+export const assert = pr => st => {
+  pr
+    ? null
+    : throw new Error(`ERROR: ${st}.`)
+}
+
+export const isNotEmpty = R.complement(R.isEmpty)
+
+export const isNotNil = R.complement(R.isNil)
+
 
 
 // requireContext()

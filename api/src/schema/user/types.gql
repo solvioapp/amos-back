@@ -11,26 +11,15 @@ type User {
 }
 
 extend type Query {
-  currentUser: User
-    @cypher(
-      statement: "MATCH (u:User {id: $user}) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
-    )
+  Login (email: String!, password: String!): String!
+  currentUser (name: String): String
   users: [User!] @hasRole (roles: [admin])
     @cypher(
       statement: "MATCH (u:User) WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
     )
-  user(id: ID!): User
-    @cypher(
-      statement: "MATCH (u:User) WHERE u.id = $id WITH { username: u.username, id: u.id, email: u.email} as User RETURN User"
-    )
 }
 
 extend type Mutation {
-  CreateUser(email: String!, password: String!): String
-  Login(email: String!, password: String!): String
-  UpdateUser(id: ID!, firstName: String!, lastName: String!): User!
-  UpdatePassword(email:String!, password: String!, currentPassword: String!): String!
-    @cypher(
-      statement: "MATCH (la:LOCAL_ACCOUNT{email: $email}) SET la+= {password:$password} RETURN la AS LOCAL_ACCOUNT"
-    )
+  Signup (email: String!, password: String!): String!
+  UpdatePassword (email: String!, password: String!, _new: String!): String!
 }
