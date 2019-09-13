@@ -15,11 +15,11 @@ R.mapObjIndexed ((val, key) => val ? null : throw new Error(`ERROR: "${key}" env
 const driver = getDriver()
 
 const context = async ({req}) => {
-  // const user = await decode(driver, req.headers.authorization)
+
   return {
     driver,
     // user,
-    req,
+    headers: req.headers,
     cypherParams: {
       // currentUserId: user?.id,
     },
@@ -38,7 +38,7 @@ const createServer = options => {
 
   const app = express()
   app.use (helmet())
-  app.use (express.static (`public`))
+
   server.applyMiddleware ({ app, path: `/` })
 
   return {server, app}

@@ -9,6 +9,6 @@ const importAll = req => {
 }
 importAll(req)
 
-const hi = R.mergeDeepRight (cache)
-hi |> console.log
-export default hi
+const cacheDefaultsRemoved = R.map (val => R.propOr (val) (`default`) (val)) (cache)
+
+export default H.mergeDeepAll (cacheDefaultsRemoved)

@@ -7,6 +7,9 @@ export const neq = R.complement (R.equals)
 
 export const read = dir => file => fs.readFileSync(path.join(dir, file), {encoding: `utf-8`})
 
+export const mergeDeepAll = R.reduce (R.mergeDeepRight) ({})
+
+
 
 // requireContext()
 // export const importRegex = (dir = `.`, useSubdirs = true, regex = /^\.\/.*$/, mode = `sync`) => {

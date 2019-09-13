@@ -6,11 +6,7 @@ import typeDefs from './types'
 import resolvers from './resolvers'
 import CONFIG from '../config'
 
-export default R.pipe (
-  makeAugmentedSchema,
-  applyDirectives,
-  applyScalars
-) ({
+export default {
   typeDefs,
   resolvers,
   config: {
@@ -19,5 +15,17 @@ export default R.pipe (
       isAuthenticated: true,
       hasRole: true,
     },
+    query: {
+      exclude: [
+        `user`,
+      ],
+    },
+    mutation: {
+      exclude: [
+        `user`,
+      ],
+    },
   },
-})
+} |> makeAugmentedSchema
+  |> applyDirectives
+  |> applyScalars

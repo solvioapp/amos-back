@@ -1,43 +1,68 @@
-import {neo4jgraphql} from "neo4j-graphql-js"
-import bcrypt from "bcrypt"
+import {R} from '../../common'
+import {neo4jgraphql} from 'neo4j-graphql-js'
+import bcrypt from 'bcrypt'
 
-import {createToken} from "../auth/auth"
+import {createToken} from '../../auth/auth'
 
 const resolvers = {
   Mutation: {
-    CreateUser: async (object, params, context, resolveInfo) => {
-      const user = params
+    CreateUser: async (_, {email, password}, {driver}) => {
+      /* Check if user exists */
+      const ses = driver.session()
+      const _1 = 
+      `MATCH (u:User) WHERE u.email = $email RETURN u`
+      const res = await ses.run (_1, {email})
+      R.length (res.records) > 0
+        ? throw new Error(`ERROR: a user with email "${email}" already exists.`)
+        : null
 
-      // Check if user exist already with email
-      const session = context.driver.session()
-      let query = 'Match (user:User) WHERE user.email = $email RETURN user;'
-      const userExist = await session.run(query, params).then(result => {
-        return result.records.map(record => {
-          return record.get('user').properties
-        })
-      })
-
-      if (userExist.length > 0) {
-        throw new Error('User already exist')
-      } else {
-        user.password = await bcrypt.hash(user.password, 12);
-        const newUser = await neo4jgraphql(object, user, context, resolveInfo, true)
-        const signedToken = await createToken({
-            user: {
-              id: newUser.id,
-              username: newUser.username,
-              email: newUser.email
-            }
-          },
-          context.SECRET
-        );
-
-        return `${signedToken}`;
-      }
-
+      /* Save user */
+      const hashedPassword = await bcrypt.hash(password, 12)
+      const _2 = 
+      `CREATE (u:User {email: $email})
+      -[:AUTHENTICATED_WITH]->
+      (l:LOCAL_ACCOUNT {hashedPassword: $hashedPassword, email: $email})
+      RETURN u`
+      await ses.run (_2, {email, hashedPassword})
+      return await createToken({user: {email}}, process.env.JWT_SECRET)
     },
-    Login: async (object, {email, password}, context, resolveInfo) => {
-      const user = await neo4jgraphql(object, {email, password}, context, resolveInfo);
+    Login: async (_, {email, password}, {driver}, resolveInfo) => {
+      const q = 
+      `MATCH (u:User {email: $email})
+      -[:AUTHENTICATED_WITH]->
+      (l:LOCAL_ACCOUNT {email: $email}) 
+      RETURN l.hashedPassword as hashedPassword`
+
+      const ses = driver.session()
+      const res = await ses.run (q, {email})
+      const rec = res.records[0]
+      const obj = Object.getOwnPropertyNames(rec)
+      obj |> console.log('obj', #)
+      const r = R.keys (rec)
+      r |> console.log('r', #)
+      const keys = Object.keys(rec)
+      keys |> console.log('keys', #)
+      rec.keys |> console.log('rec.keys', #)
+      rec.length |> console.log('rec.length', #)
+      rec._fields |> console.log('rec._fields', #)
+      rec._fieldLookup |> console.log('rec._fieldLookup', #)
+      // rec.get(`hashPassword`) |> console.log('rec.get(`hashPassword`)', #)
+      const p = rec.__proto__
+      p |> console.log('p', #)
+
+      const obj2 = Object.getOwnPropertyNames(p)
+      
+      obj2 |> console.log('obj2', #)
+
+      rec.toObject() |> console.log('rec.toObject()', #)
+
+      rec.forEach(console.log) |> console.log('rec.forEach(console.log)', #)
+
+      rec.has(`hashPassword`) |> console.log('rec.has(`hashPassword`)', #)
+      
+      const prototype = rec.prototype
+      prototype |> console.log('prototype', #)
+      // const user = await neo4jgraphql(object, {email, password}, context, resolveInfo);
       if (!user) {
         throw new Error("No user with that email");
         return null;

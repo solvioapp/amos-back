@@ -5,6 +5,10 @@ type Resource {
   amosGames: [FOR_RESOURCE!]!
 }
 
+extend type Mutation {
+  addReview: Boolean!
+}
+
 type RESOURCE_CREATED_BY @relation(name: "RESOURCE_CREATED_BY") {
   from: Resource!
   to: User!
