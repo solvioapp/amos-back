@@ -1,12 +1,8 @@
-import {H,R} from '../../common'
-import {neo4jgraphql} from 'neo4j-graphql-js'
-import bcrypt from 'bcrypt'
-
-import {createToken} from '../../auth/auth'
+import {A,H,R,bcrypt} from '../../common'
 
 export default {
   Query: {
-    Login: async (_, {email, password}, {driver}) => {
+    login: async (_, {email, password}, {driver}) => {
       /* Setup */
       const ses = driver.session()
       const _1 = 
@@ -25,7 +21,7 @@ export default {
       H.assert (bcrypt.compare(password, recs[0].get (`hashedPassword`))) (`incorrect password`)
 
       /* Grant jwt */
-      return await createToken({user: {email}}, process.env.JWT_SECRET)
+      return await A.createToken({user: {email}}, process.env.JWT_SECRET)
     },
     currentUser: async (_, __, {driver, user}) => {
       /* Setup */
@@ -47,7 +43,7 @@ export default {
     },
   },
   Mutation: {
-    Signup: async (_, {email, password}, {driver}) => {
+    signup: async (_, {email, password}, {driver}) => {
       /* Setup */
       const ses = driver.session()
       const _1 = 
@@ -69,9 +65,9 @@ export default {
       await ses.run (_2, {email, hashedPassword})
 
       /* Grant jwt */
-      return await createToken({user: {email}}, process.env.JWT_SECRET)
+      return await A.createToken({user: {email}}, process.env.JWT_SECRET)
     },
-    UpdatePassword: async (_, {email, password, _new}, {driver, user}) => {
+    updatePassword: async (_, {email, password, _new}, {driver, user}) => {
       /* Setup */
       const ses = driver.session()
 

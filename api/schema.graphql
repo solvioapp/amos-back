@@ -1,0 +1,678 @@
+directive @cypher(statement: String) on FIELD_DEFINITION
+directive @relation(
+  name: String
+  direction: _RelationDirections
+  from: String
+  to: String
+) on FIELD_DEFINITION | OBJECT
+directive @additionalLabels(labels: [String]) on OBJECT
+directive @MutationMeta(
+  relationship: String
+  from: String
+  to: String
+) on FIELD_DEFINITION
+directive @neo4j_ignore on FIELD_DEFINITION
+directive @isAuthenticated on OBJECT | FIELD_DEFINITION
+directive @hasRole(roles: [Role]) on OBJECT | FIELD_DEFINITION
+# Format the input as using lodash lowerCase
+directive @lowerCase on FIELD
+# Format the input as using lodash trim
+directive @trim on FIELD
+# Format the input as using lodash default
+directive @default(
+  # A default value for not filled field
+  to: String
+) on FIELD
+type _AddAmosGameResourcePayload {
+  from: AmosGame
+  to: Resource
+}
+
+type _AddAmosGameVotesPayload {
+  from: AmosGame
+  to: User
+  timestamp: _Neo4jDateTime
+}
+
+type _AddResourceAmosGamesPayload {
+  from: AmosGame
+  to: Resource
+}
+
+type _AddResourceCreatedByPayload {
+  from: Resource
+  to: User
+  timestamp: _Neo4jDateTime
+}
+
+type _AddTopicParentsPayload {
+  from: Topic
+  to: Topic
+}
+
+type _AddUserVotesPayload {
+  from: AmosGame
+  to: User
+  timestamp: _Neo4jDateTime
+}
+
+input _AmosGameFilter {
+  AND: [_AmosGameFilter!]
+  OR: [_AmosGameFilter!]
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  resource: _AmosGameFOR_RESOURCEFilter
+  resource_not: _AmosGameFOR_RESOURCEFilter
+  resource_in: [_AmosGameFOR_RESOURCEFilter!]
+  resource_not_in: [_AmosGameFOR_RESOURCEFilter!]
+  votes: _AmosGameVOTED_BYFilter
+  votes_not: _AmosGameVOTED_BYFilter
+  votes_in: [_AmosGameVOTED_BYFilter!]
+  votes_not_in: [_AmosGameVOTED_BYFilter!]
+}
+
+input _AmosGameFOR_RESOURCEFilter {
+  Resource: _ResourceFilter
+}
+
+input _AmosGameInput {
+  id: ID!
+}
+
+enum _AmosGameOrdering {
+  id_asc
+  id_desc
+  _id_asc
+  _id_desc
+}
+
+type _AmosGameResource {
+  Resource: Resource
+}
+
+input _AmosGameVOTED_BYFilter {
+  AND: [_AmosGameVOTED_BYFilter!]
+  OR: [_AmosGameVOTED_BYFilter!]
+  timestamp: _Neo4jDateTimeInput
+  timestamp_not: _Neo4jDateTimeInput
+  timestamp_in: [_Neo4jDateTimeInput!]
+  timestamp_not_in: [_Neo4jDateTimeInput!]
+  timestamp_lt: _Neo4jDateTimeInput
+  timestamp_lte: _Neo4jDateTimeInput
+  timestamp_gt: _Neo4jDateTimeInput
+  timestamp_gte: _Neo4jDateTimeInput
+  User: _UserFilter
+}
+
+type _AmosGameVotes {
+  timestamp: _Neo4jDateTime!
+  User: User
+}
+
+input _IS_PART_OFDirectionsFilter {
+  from: _IS_PART_OFFilter
+  to: _IS_PART_OFFilter
+}
+
+input _IS_PART_OFFilter {
+  Topic: _TopicFilter
+}
+
+type _Neo4jDate {
+  year: Int
+  month: Int
+  day: Int
+  formatted: String
+}
+
+input _Neo4jDateInput {
+  year: Int
+  month: Int
+  day: Int
+  formatted: String
+}
+
+type _Neo4jDateTime {
+  year: Int
+  month: Int
+  day: Int
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  microsecond: Int
+  nanosecond: Int
+  timezone: String
+  formatted: String
+}
+
+input _Neo4jDateTimeInput {
+  year: Int
+  month: Int
+  day: Int
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  microsecond: Int
+  nanosecond: Int
+  timezone: String
+  formatted: String
+}
+
+type _Neo4jLocalDateTime {
+  year: Int
+  month: Int
+  day: Int
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  microsecond: Int
+  nanosecond: Int
+  formatted: String
+}
+
+input _Neo4jLocalDateTimeInput {
+  year: Int
+  month: Int
+  day: Int
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  microsecond: Int
+  nanosecond: Int
+  formatted: String
+}
+
+type _Neo4jLocalTime {
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  microsecond: Int
+  nanosecond: Int
+  formatted: String
+}
+
+input _Neo4jLocalTimeInput {
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  microsecond: Int
+  nanosecond: Int
+  formatted: String
+}
+
+type _Neo4jTime {
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  microsecond: Int
+  nanosecond: Int
+  timezone: String
+  formatted: String
+}
+
+input _Neo4jTimeInput {
+  hour: Int
+  minute: Int
+  second: Int
+  nanosecond: Int
+  millisecond: Int
+  microsecond: Int
+  timezone: String
+  formatted: String
+}
+
+enum _RelationDirections {
+  IN
+  OUT
+}
+
+type _RemoveAmosGameResourcePayload {
+  from: AmosGame
+  to: Resource
+}
+
+type _RemoveAmosGameVotesPayload {
+  from: AmosGame
+  to: User
+}
+
+type _RemoveResourceAmosGamesPayload {
+  from: AmosGame
+  to: Resource
+}
+
+type _RemoveResourceCreatedByPayload {
+  from: Resource
+  to: User
+}
+
+type _RemoveTopicParentsPayload {
+  from: Topic
+  to: Topic
+}
+
+type _RemoveUserVotesPayload {
+  from: AmosGame
+  to: User
+}
+
+input _RESOURCE_CREATED_BYInput {
+  timestamp: _Neo4jDateTimeInput!
+}
+
+type _ResourceAmosGames {
+  AmosGame: AmosGame
+}
+
+type _ResourceCreatedBy {
+  timestamp: _Neo4jDateTime!
+  User: User
+}
+
+input _ResourceFilter {
+  AND: [_ResourceFilter!]
+  OR: [_ResourceFilter!]
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  createdBy: _ResourceRESOURCE_CREATED_BYFilter
+  createdBy_not: _ResourceRESOURCE_CREATED_BYFilter
+  createdBy_in: [_ResourceRESOURCE_CREATED_BYFilter!]
+  createdBy_not_in: [_ResourceRESOURCE_CREATED_BYFilter!]
+  amosGames: _ResourceFOR_RESOURCEFilter
+  amosGames_not: _ResourceFOR_RESOURCEFilter
+  amosGames_in: [_ResourceFOR_RESOURCEFilter!]
+  amosGames_not_in: [_ResourceFOR_RESOURCEFilter!]
+  amosGames_some: _ResourceFOR_RESOURCEFilter
+  amosGames_none: _ResourceFOR_RESOURCEFilter
+  amosGames_single: _ResourceFOR_RESOURCEFilter
+  amosGames_every: _ResourceFOR_RESOURCEFilter
+}
+
+input _ResourceFOR_RESOURCEFilter {
+  AmosGame: _AmosGameFilter
+}
+
+input _ResourceInput {
+  name: String!
+}
+
+enum _ResourceOrdering {
+  name_asc
+  name_desc
+  _id_asc
+  _id_desc
+}
+
+input _ResourceRESOURCE_CREATED_BYFilter {
+  AND: [_ResourceRESOURCE_CREATED_BYFilter!]
+  OR: [_ResourceRESOURCE_CREATED_BYFilter!]
+  timestamp: _Neo4jDateTimeInput
+  timestamp_not: _Neo4jDateTimeInput
+  timestamp_in: [_Neo4jDateTimeInput!]
+  timestamp_not_in: [_Neo4jDateTimeInput!]
+  timestamp_lt: _Neo4jDateTimeInput
+  timestamp_lte: _Neo4jDateTimeInput
+  timestamp_gt: _Neo4jDateTimeInput
+  timestamp_gte: _Neo4jDateTimeInput
+  User: _UserFilter
+}
+
+input _ResponseFilter {
+  AND: [_ResponseFilter!]
+  OR: [_ResponseFilter!]
+  success: Boolean
+  success_not: Boolean
+}
+
+input _ResponseInput {
+  success: Boolean!
+}
+
+enum _ResponseOrdering {
+  success_asc
+  success_desc
+  _id_asc
+  _id_desc
+}
+
+input _TopicFilter {
+  AND: [_TopicFilter!]
+  OR: [_TopicFilter!]
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  parents: _IS_PART_OFDirectionsFilter
+  parents_not: _IS_PART_OFDirectionsFilter
+  parents_in: [_IS_PART_OFDirectionsFilter!]
+  parents_not_in: [_IS_PART_OFDirectionsFilter!]
+  parents_some: _IS_PART_OFDirectionsFilter
+  parents_none: _IS_PART_OFDirectionsFilter
+  parents_single: _IS_PART_OFDirectionsFilter
+  parents_every: _IS_PART_OFDirectionsFilter
+}
+
+input _TopicInput {
+  name: String!
+}
+
+enum _TopicOrdering {
+  name_asc
+  name_desc
+  _id_asc
+  _id_desc
+}
+
+type _TopicParents {
+  Topic: Topic
+}
+
+type _TopicParentsDirections {
+  from(filter: _IS_PART_OFFilter): [_TopicParents]
+  to(filter: _IS_PART_OFFilter): [_TopicParents]
+}
+
+input _UserFilter {
+  AND: [_UserFilter!]
+  OR: [_UserFilter!]
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  createdAt: _Neo4jDateTimeInput
+  createdAt_not: _Neo4jDateTimeInput
+  createdAt_in: [_Neo4jDateTimeInput!]
+  createdAt_not_in: [_Neo4jDateTimeInput!]
+  createdAt_lt: _Neo4jDateTimeInput
+  createdAt_lte: _Neo4jDateTimeInput
+  createdAt_gt: _Neo4jDateTimeInput
+  createdAt_gte: _Neo4jDateTimeInput
+  votes: _UserVOTED_BYFilter
+  votes_not: _UserVOTED_BYFilter
+  votes_in: [_UserVOTED_BYFilter!]
+  votes_not_in: [_UserVOTED_BYFilter!]
+  votes_some: _UserVOTED_BYFilter
+  votes_none: _UserVOTED_BYFilter
+  votes_single: _UserVOTED_BYFilter
+  votes_every: _UserVOTED_BYFilter
+}
+
+input _UserInput {
+  id: ID!
+}
+
+enum _UserOrdering {
+  id_asc
+  id_desc
+  email_asc
+  email_desc
+  createdAt_asc
+  createdAt_desc
+  _id_asc
+  _id_desc
+}
+
+input _UserVOTED_BYFilter {
+  AND: [_UserVOTED_BYFilter!]
+  OR: [_UserVOTED_BYFilter!]
+  timestamp: _Neo4jDateTimeInput
+  timestamp_not: _Neo4jDateTimeInput
+  timestamp_in: [_Neo4jDateTimeInput!]
+  timestamp_not_in: [_Neo4jDateTimeInput!]
+  timestamp_lt: _Neo4jDateTimeInput
+  timestamp_lte: _Neo4jDateTimeInput
+  timestamp_gt: _Neo4jDateTimeInput
+  timestamp_gte: _Neo4jDateTimeInput
+  AmosGame: _AmosGameFilter
+}
+
+type _UserVotes {
+  timestamp: _Neo4jDateTime!
+  AmosGame: AmosGame
+}
+
+input _VOTED_BYInput {
+  timestamp: _Neo4jDateTimeInput!
+}
+
+type AmosGame {
+  id: ID!
+  resource(filter: _AmosGameFOR_RESOURCEFilter): _AmosGameResource
+  votes(filter: _AmosGameVOTED_BYFilter): _AmosGameVotes
+  _id: String
+}
+
+# A date string, such as 2007-12-03, compliant with the `full-date` format
+# outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for
+# representation of dates and times using the Gregorian calendar.
+scalar Date
+
+# A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
+# `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO
+# 8601 standard for representation of dates and times using the Gregorian calendar.
+scalar DateTime
+
+type FOR_RESOURCE {
+  from: AmosGame!
+  to: Resource!
+}
+
+type IS_PART_OF {
+  from: Topic!
+  to: Topic!
+}
+
+type Mutation {
+  addReview: Boolean!
+  Signup(email: String!, password: String!): String!
+  UpdatePassword(email: String!, password: String!, _new: String!): String!
+  CreateAmosGame(id: ID): AmosGame
+  DeleteAmosGame(id: ID!): AmosGame
+  AddAmosGameResource(
+    from: _AmosGameInput!
+    to: _ResourceInput!
+  ): _AddAmosGameResourcePayload
+  RemoveAmosGameResource(
+    from: _AmosGameInput!
+    to: _ResourceInput!
+  ): _RemoveAmosGameResourcePayload
+  AddAmosGameVotes(
+    from: _AmosGameInput!
+    to: _UserInput!
+    data: _VOTED_BYInput!
+  ): _AddAmosGameVotesPayload
+  RemoveAmosGameVotes(
+    from: _AmosGameInput!
+    to: _UserInput!
+  ): _RemoveAmosGameVotesPayload
+  CreateResource(name: String, urls: [String!]!): Resource
+  UpdateResource(name: String!, urls: [String!]): Resource
+  DeleteResource(name: String!): Resource
+  AddResourceCreatedBy(
+    from: _ResourceInput!
+    to: _UserInput!
+    data: _RESOURCE_CREATED_BYInput!
+  ): _AddResourceCreatedByPayload
+  RemoveResourceCreatedBy(
+    from: _ResourceInput!
+    to: _UserInput!
+  ): _RemoveResourceCreatedByPayload
+  AddResourceAmosGames(
+    from: _AmosGameInput!
+    to: _ResourceInput!
+  ): _AddResourceAmosGamesPayload
+  RemoveResourceAmosGames(
+    from: _AmosGameInput!
+    to: _ResourceInput!
+  ): _RemoveResourceAmosGamesPayload
+  CreateTopic(name: String!): Topic
+  DeleteTopic(name: String!): Topic
+  AddTopicParents(from: _TopicInput!, to: _TopicInput!): _AddTopicParentsPayload
+  RemoveTopicParents(
+    from: _TopicInput!
+    to: _TopicInput!
+  ): _RemoveTopicParentsPayload
+  CreateResponse(success: Boolean!, message: StringList): Response
+  UpdateResponse(success: Boolean!, message: StringList): Response
+  DeleteResponse(success: Boolean!): Response
+  CreateUser(id: ID, email: String!, createdAt: _Neo4jDateTimeInput!): User
+  UpdateUser(id: ID!, email: String, createdAt: _Neo4jDateTimeInput): User
+  DeleteUser(id: ID!): User
+  AddUserVotes(
+    from: _AmosGameInput!
+    to: _UserInput!
+    data: _VOTED_BYInput!
+  ): _AddUserVotesPayload
+  RemoveUserVotes(
+    from: _AmosGameInput!
+    to: _UserInput!
+  ): _RemoveUserVotesPayload
+}
+
+type Query {
+  Login(email: String!, password: String!): String!
+  currentUser(name: String): String
+  users(first: Int, offset: Int, orderBy: [_UserOrdering]): [User!]
+  AmosGame(
+    id: ID
+    _id: String
+    first: Int
+    offset: Int
+    orderBy: [_AmosGameOrdering]
+    filter: _AmosGameFilter
+  ): [AmosGame]
+  Resource(
+    name: String
+    urls: String
+    _id: String
+    first: Int
+    offset: Int
+    orderBy: [_ResourceOrdering]
+    filter: _ResourceFilter
+  ): [Resource]
+  Topic(
+    name: String
+    _id: String
+    first: Int
+    offset: Int
+    orderBy: [_TopicOrdering]
+    filter: _TopicFilter
+  ): [Topic]
+  Response(
+    success: Boolean
+    message: StringList
+    _id: String
+    first: Int
+    offset: Int
+    orderBy: [_ResponseOrdering]
+    filter: _ResponseFilter
+  ): [Response]
+  User(
+    id: ID
+    email: String
+    createdAt: _Neo4jDateTimeInput
+    _id: String
+    first: Int
+    offset: Int
+    orderBy: [_UserOrdering]
+    filter: _UserFilter
+  ): [User]
+}
+
+type Resource {
+  name: String
+  urls: [String!]!
+  createdBy(filter: _ResourceRESOURCE_CREATED_BYFilter): _ResourceCreatedBy
+  amosGames(filter: _ResourceFOR_RESOURCEFilter): [_ResourceAmosGames]
+  _id: String
+}
+
+type RESOURCE_CREATED_BY {
+  from: Resource!
+  to: User!
+  timestamp: _Neo4jDateTime!
+}
+
+type Response {
+  success: Boolean!
+  message: StringList
+  _id: String
+}
+
+enum Role {
+  user
+  admin
+}
+
+scalar StringList
+
+# A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format
+# outlined in section 5.6 of the RFC 3339profile of the ISO 8601 standard for
+# representation of dates and times using the Gregorian calendar.
+scalar Time
+
+type Topic {
+  name: String!
+  parents: _TopicParentsDirections
+  _id: String
+}
+
+type User {
+  id: ID!
+  email: String!
+  createdAt: _Neo4jDateTime!
+  votes(filter: _UserVOTED_BYFilter): [_UserVotes]
+  _id: String
+}
+
+type VOTED_BY {
+  from: AmosGame!
+  to: User!
+  timestamp: _Neo4jDateTime!
+}
+

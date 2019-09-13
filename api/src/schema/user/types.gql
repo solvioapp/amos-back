@@ -11,7 +11,7 @@ type User {
 }
 
 extend type Query {
-  Login (email: String!, password: String!): String!
+  login (email: String!, password: String!): String!
   currentUser (name: String): String
   users: [User!] @hasRole (roles: [admin])
     @cypher(
@@ -20,6 +20,6 @@ extend type Query {
 }
 
 extend type Mutation {
-  Signup (email: String!, password: String!): String!
-  UpdatePassword (email: String!, password: String!, _new: String!): String!
+  signup (email: String!, password: String!): String!
+  updatePassword (email: String!, password: String!, _new: String!): String!
 }

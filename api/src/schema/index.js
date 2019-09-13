@@ -17,12 +17,12 @@ export default {
     },
     query: {
       exclude: [
-        `user`,
+        // `user`,
       ],
     },
     mutation: {
       exclude: [
-        `user`,
+        // `Topic`,
       ],
     },
   },

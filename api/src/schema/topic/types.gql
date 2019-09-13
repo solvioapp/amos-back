@@ -1,9 +1,21 @@
-type Topic @hasRole (roles: [admin]) {
+type Topic {
+  # id: ID!
   name: String!
+  children: [IS_PART_OF!]!
   parents: [IS_PART_OF!]!
 }
 
 type IS_PART_OF @relation (name: "IS_PART_OF") {
   from: Topic!
   to: Topic!
+}
+
+input TopicCreateInput {
+  name: String!
+  children: [String!]!
+  parents: [String!]!
+}
+
+extend type Mutation {
+  CreateTopic (name: String!, children: [String!]!, parents: [String!]!): Topic! @hasRole (roles: [admin])
 }
