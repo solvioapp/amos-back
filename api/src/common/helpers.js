@@ -23,6 +23,11 @@ export const isNotEmpty = R.complement(R.isEmpty)
 
 export const isNotNil = R.complement(R.isNil)
 
+/**
+ * @description Turns an array of named functions to object with keys corresponding to those names
+ * @param {Array} - array of fns
+ */
+export const arrayOfFnsToObject = R.reduce ((acc, val) => R.set (R.lensProp (val.name)) (val) (acc)) ({})
 
 
 // requireContext()

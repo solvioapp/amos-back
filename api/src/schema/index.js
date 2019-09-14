@@ -20,11 +20,12 @@ export default {
         // `user`,
       ],
     },
-    mutation: {
-      exclude: [
-        // `Topic`,
-      ],
-    },
+    mutation: false,
+    // {
+    //   exclude: [
+    //     // `Topic`,
+    //   ],
+    // },
   },
 } |> makeAugmentedSchema
   |> applyDirectives

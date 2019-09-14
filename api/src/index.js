@@ -7,6 +7,9 @@ app.listen({ port: CONFIG.GRAPHQL_PORT }, () => {
   console.log(`GraphQLServer ready at ${CONFIG.GRAPHQL_URI} 🚀`)
 })
 
+// Execute a file
+// import './schema/user/resolvers'
+
 // /*
 //  * Create a new ApolloServer instance, serving the GraphQL schema
 //  * created using makeAugmentedSchema above and injecting the Neo4j driver

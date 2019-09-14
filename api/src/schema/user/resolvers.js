@@ -1,95 +1,24 @@
-import {A,H,R,bcrypt} from '../../common'
+import {H,R,requireContext} from '../../common'
+
+requireContext()
+/* Matches all .js files in /mutations and /queries (including recusive dirs) */
+const queries = require.context(`.`, true, /\.\/queries\/(\.|\w)+\.js$/)
+const mutations = require.context(`.`, true, /\.\/mutations\/(\.|\w)+\.js$/)
+
+const queriesCache = []
+const mutationsCache = []
+
+const importAll = cache => req => {
+  req.keys().forEach(key => cache.push(req(key)))
+}
+
+importAll (queriesCache) (queries)
+importAll (mutationsCache) (mutations)
+
+const queriesDefaultsRemoved = R.map (v => R.propOr (v) (`default`) (v)) (queriesCache)
+const mutationsDefaultsRemoved = R.map (v => R.propOr (v) (`default`) (v)) (mutationsCache)
 
 export default {
-  Query: {
-    login: async (_, {email, password}, {driver}) => {
-      /* Setup */
-      const ses = driver.session()
-      const _1 = 
-      `MATCH (u:User {email: $email})
-      -[:AUTHENTICATED_WITH]->
-      (l:LOCAL_ACCOUNT {email: $email}) 
-      RETURN l.hashedPassword as hashedPassword`
-
-      /* Get user's hashed password */
-      const {records: recs} = await ses.run (_1, {email})
-
-      /* Check if user exists */
-      H.assert (H.isNotEmpty (recs)) (`no user with that email`)
-
-      /* Check if password is correct */
-      H.assert (bcrypt.compare(password, recs[0].get (`hashedPassword`))) (`incorrect password`)
-
-      /* Grant jwt */
-      return await A.createToken({user: {email}}, process.env.JWT_SECRET)
-    },
-    currentUser: async (_, __, {driver, user}) => {
-      /* Setup */
-      const ses = driver.session()
-
-      /* Check request is authenticated */
-      H.assert (H.isNotNil (user?.id)) (`authentication required`)
-
-      const _1 =
-      `MATCH (u:User {id: $id})
-      WITH {email: u.email} as u
-      RETURN u`
-
-      const {records: recs} = await ses.run (_1, {id: user?.id})
-
-      recs |> console.log('recs', #)
-      
-      return recs[0].get(`u`)
-    },
-  },
-  Mutation: {
-    signup: async (_, {email, password}, {driver}) => {
-      /* Setup */
-      const ses = driver.session()
-      const _1 = 
-      `MATCH (u:User) WHERE u.email = $email RETURN u`
-
-      /* Check if user exists */
-      const {records: recs} = await ses.run (_1, {email})      
-      H.assert (R.isEmpty (recs)) (`a user with email ${email} already exists.`)
-
-      /* Hash password */
-      const hashedPassword = await bcrypt.hash(password, 12)
-      const _2 = 
-      `CREATE (u:User {email: $email})
-      -[:AUTHENTICATED_WITH]->
-      (l:LOCAL_ACCOUNT {hashedPassword: $hashedPassword, email: $email})
-      RETURN u`
-
-      /* Save user to db! */
-      await ses.run (_2, {email, hashedPassword})
-
-      /* Grant jwt */
-      return await A.createToken({user: {email}}, process.env.JWT_SECRET)
-    },
-    updatePassword: async (_, {email, password, _new}, {driver, user}) => {
-      /* Setup */
-      const ses = driver.session()
-
-      /* Check request is authenticated */
-      H.assert (H.isNotNil (user?.id)) (`authentication required`)
-
-      /* Check current password is correct */
-      const _1 = 
-      `MATCH (la:LOCAL_ACCOUNT)
-      WHERE la.email = $email
-      RETURN la`
-      const {records: recs} = await ses.run(_1, {email})
-      H.assert (H.isNotEmpty (recs)) (`no user with that email`)
-      H.assert (bcrypt.compare(password, recs[0].get (`hashedPassowrd`))) (`incorrect password`)
-
-      /* Save new password */
-      const hashedNew = await bcrypt.hash (_new, 12)
-      const _2 =
-      `MATCH (la:LOCAL_ACCOUNT {email: $email})
-      SET la+= {hashedPassword: hashedNew}
-      RETURN la`
-      await ses.run (_2, {email, hashedNew})
-    },
-  },
+  Query: H.arrayOfFnsToObject (queriesDefaultsRemoved),
+  Mutation: H.arrayOfFnsToObject (mutationsDefaultsRemoved),
 }
