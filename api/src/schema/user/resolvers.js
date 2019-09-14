@@ -1,7 +1,8 @@
+/* This file just exports everything from ./queries and ./mutations */
+
 import {H,R,requireContext} from '../../common'
 
 requireContext()
-/* Matches all .js files in /mutations and /queries (including recusive dirs) */
 const queries = require.context(`.`, true, /\.\/queries\/(\.|\w)+\.js$/)
 const mutations = require.context(`.`, true, /\.\/mutations\/(\.|\w)+\.js$/)
 
