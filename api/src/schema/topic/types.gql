@@ -17,11 +17,17 @@ input CreateTopicInput {
   parents: [String!]!
 }
 
+type Path {
+  list: [String!]!
+}
+
 extend type Query {
-  autocomplete (string: String): String!
+  autocomplete (name: String!): [Path!]!
+  getChildrenRec (name: String!, level: Int!): [Path!]!
+  # search (name: String!): 
+  getMostCommonPrerequisites (name: String!): [String!]!
 }
 
 extend type Mutation {
-  addTopic (input: CreateTopicInput!): Topic! @hasRole (roles: [admin])
-  # addTopic (name: String!, children: [String!]!, parents: [String!]!): User! @hasRole (roles: [admin])
+  createTopic (input: CreateTopicInput!): Topic! @hasRole (roles: [admin])
 }

@@ -4,15 +4,27 @@ enum Role {
 }
 
 type User {
+  # Fields
   username: String!
   createdAt: DateTime!
+
+  # Relations
   votes: [VOTED_ON!]!
+  proficiencies: [PROFICIENCY!]!
+
+  # Functions
+  discover: [Topic!]!
 }
 
 type VOTED_ON @relation(name: "VOTED_ON") {
   from: User!
   to: AmosGame!
   timestamp: DateTime!
+}
+
+type PROFICIENCY @relation (name: "PROFICIENCY") {
+  from: User!
+  to: Topic!
 }
 
 extend type Query {
@@ -27,4 +39,5 @@ extend type Query {
 extend type Mutation {
   signup (username: String!, email: String!, password: String!): String!
   updatePassword (email: String!, password: String!, _new: String!): String!
+  selfAttest (topic: String!): Boolean!
 }
