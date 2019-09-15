@@ -17,15 +17,18 @@ export default {
     },
     query: {
       exclude: [
-        // `user`,
+        // `AmosGame`,
+        `Response`,
       ],
     },
-    mutation: false,
-    // {
-    //   exclude: [
-    //     // `Topic`,
-    //   ],
-    // },
+    mutation: {
+      exclude: [
+        // `AmosGame`,
+        // `AmosGameVotes`,
+        // `Response`,
+        // `createTopic`,
+      ],
+    },
   },
 } |> makeAugmentedSchema
   |> applyDirectives

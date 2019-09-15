@@ -2,7 +2,7 @@ type Resource {
   name: String
   urls: [String!]!
   createdBy: RESOURCE_CREATED_BY!
-  amosGames: [FOR_RESOURCE!]!
+  # amosGames: [FOR_RESOURCE!]!
 }
 
 extend type Mutation {

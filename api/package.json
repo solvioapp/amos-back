@@ -24,6 +24,7 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tag": "^2.10.1",
     "helmet": "^3.21.0",
+    "merge-graphql-schemas": "^1.7.0",
     "neo4j-driver": "^1.7.6",
     "neo4j-graphql-js": "^2.7.2",
     "node-fetch": "^2.6.0",

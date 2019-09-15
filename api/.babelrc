@@ -1,6 +1,6 @@
 {
   "presets": [
-    "@babel/preset-env",
+    "@babel/preset-env"
   ],
   "plugins": [
     // "@babel/proposal-object-rest-spread",
@@ -10,7 +10,7 @@
     // "@babel/plugin-proposal-private-methods",
     "require-context-hook",
     "@babel/plugin-proposal-optional-chaining",
-    "@babel/plugin-proposal-throw-expressions",
+    "@babel/plugin-proposal-throw-expressions"
   ],
-  "sourceMaps": true,
+  "sourceMaps": true
 }

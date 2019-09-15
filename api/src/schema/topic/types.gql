@@ -10,12 +10,13 @@ type IS_PART_OF @relation (name: "IS_PART_OF") {
   to: Topic!
 }
 
-input TopicCreateInput {
+input CreateTopicInput {
   name: String!
   children: [String!]!
   parents: [String!]!
 }
 
 extend type Mutation {
-  CreateTopic (name: String!, children: [String!]!, parents: [String!]!): Topic! @hasRole (roles: [admin])
+  # createTopic (input: CreateTopicInput!): Topic! @hasRole (roles: [admin])
+  createTopic (name: String!, children: [String!]!, parents: [String!]!): User! @hasRole (roles: [admin])
 }

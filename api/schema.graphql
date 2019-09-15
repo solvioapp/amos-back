@@ -45,6 +45,11 @@ type _AddResourceCreatedByPayload {
   timestamp: _Neo4jDateTime
 }
 
+type _AddTopicChildrenPayload {
+  from: Topic
+  to: Topic
+}
+
 type _AddTopicParentsPayload {
   from: Topic
   to: Topic
@@ -261,6 +266,11 @@ type _RemoveResourceCreatedByPayload {
   to: User
 }
 
+type _RemoveTopicChildrenPayload {
+  from: Topic
+  to: Topic
+}
+
 type _RemoveTopicParentsPayload {
   from: Topic
   to: Topic
@@ -340,22 +350,17 @@ input _ResourceRESOURCE_CREATED_BYFilter {
   User: _UserFilter
 }
 
-input _ResponseFilter {
-  AND: [_ResponseFilter!]
-  OR: [_ResponseFilter!]
-  success: Boolean
-  success_not: Boolean
-}
-
 input _ResponseInput {
   success: Boolean!
 }
 
-enum _ResponseOrdering {
-  success_asc
-  success_desc
-  _id_asc
-  _id_desc
+type _TopicChildren {
+  Topic: Topic
+}
+
+type _TopicChildrenDirections {
+  from(filter: _IS_PART_OFFilter): [_TopicChildren]
+  to(filter: _IS_PART_OFFilter): [_TopicChildren]
 }
 
 input _TopicFilter {
@@ -371,6 +376,14 @@ input _TopicFilter {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  children: _IS_PART_OFDirectionsFilter
+  children_not: _IS_PART_OFDirectionsFilter
+  children_in: [_IS_PART_OFDirectionsFilter!]
+  children_not_in: [_IS_PART_OFDirectionsFilter!]
+  children_some: _IS_PART_OFDirectionsFilter
+  children_none: _IS_PART_OFDirectionsFilter
+  children_single: _IS_PART_OFDirectionsFilter
+  children_every: _IS_PART_OFDirectionsFilter
   parents: _IS_PART_OFDirectionsFilter
   parents_not: _IS_PART_OFDirectionsFilter
   parents_in: [_IS_PART_OFDirectionsFilter!]
@@ -487,6 +500,12 @@ type AmosGame {
   _id: String
 }
 
+input CreateTopicInput {
+  name: String!
+  children: [String!]!
+  parents: [String!]!
+}
+
 # A date string, such as 2007-12-03, compliant with the `full-date` format
 # outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for
 # representation of dates and times using the Gregorian calendar.
@@ -509,8 +528,9 @@ type IS_PART_OF {
 
 type Mutation {
   addReview: Boolean!
-  Signup(email: String!, password: String!): String!
-  UpdatePassword(email: String!, password: String!, _new: String!): String!
+  CreateTopic(input: CreateTopicInput!): Topic!
+  signup(email: String!, password: String!): String!
+  updatePassword(email: String!, password: String!, _new: String!): String!
   CreateAmosGame(id: ID): AmosGame
   DeleteAmosGame(id: ID!): AmosGame
   AddAmosGameResource(
@@ -550,8 +570,15 @@ type Mutation {
     from: _AmosGameInput!
     to: _ResourceInput!
   ): _RemoveResourceAmosGamesPayload
-  CreateTopic(name: String!): Topic
   DeleteTopic(name: String!): Topic
+  AddTopicChildren(
+    from: _TopicInput!
+    to: _TopicInput!
+  ): _AddTopicChildrenPayload
+  RemoveTopicChildren(
+    from: _TopicInput!
+    to: _TopicInput!
+  ): _RemoveTopicChildrenPayload
   AddTopicParents(from: _TopicInput!, to: _TopicInput!): _AddTopicParentsPayload
   RemoveTopicParents(
     from: _TopicInput!
@@ -575,7 +602,7 @@ type Mutation {
 }
 
 type Query {
-  Login(email: String!, password: String!): String!
+  login(email: String!, password: String!): String!
   currentUser(name: String): String
   users(first: Int, offset: Int, orderBy: [_UserOrdering]): [User!]
   AmosGame(
@@ -603,15 +630,6 @@ type Query {
     orderBy: [_TopicOrdering]
     filter: _TopicFilter
   ): [Topic]
-  Response(
-    success: Boolean
-    message: StringList
-    _id: String
-    first: Int
-    offset: Int
-    orderBy: [_ResponseOrdering]
-    filter: _ResponseFilter
-  ): [Response]
   User(
     id: ID
     email: String
@@ -641,7 +659,6 @@ type RESOURCE_CREATED_BY {
 type Response {
   success: Boolean!
   message: StringList
-  _id: String
 }
 
 enum Role {
@@ -658,6 +675,7 @@ scalar Time
 
 type Topic {
   name: String!
+  children: _TopicChildrenDirections
   parents: _TopicParentsDirections
   _id: String
 }
