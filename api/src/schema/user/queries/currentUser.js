@@ -14,8 +14,6 @@ const currentUser = async (_, __, {driver, user}) => {
 
   const {records: recs} = await ses.run (_1, {id: user?.id})
 
-  recs |> console.log('recs', #)
-  
   return recs[0].get(`u`)
 }
 

@@ -13,7 +13,7 @@ const login = async (_, {email, password}, {driver}) => {
   const {records: recs} = await ses.run (_1, {email})
 
   /* Check if user exists */
-  H.assert (H.isNotEmpty (recs)) (`no user with that email`)
+  H.assert (H.isNotEmpty (recs)) (`no user with email ${email}`)
 
   /* Check if password is correct */
   H.assert (bcrypt.compare(password, recs[0].get (`hashedPassword`))) (`incorrect password`)

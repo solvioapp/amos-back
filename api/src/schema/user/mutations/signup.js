@@ -8,7 +8,7 @@ const signup = async (_, {email, password}, {driver}) => {
 
   /* Check if user exists */
   const {records: recs} = await ses.run (_1, {email})      
-  H.assert (R.isEmpty (recs)) (`a user with email ${email} already exists.`)
+  H.assert (R.isEmpty (recs)) (`a user with email ${email} already exists`)
 
   /* Hash password */
   const hashedPassword = await bcrypt.hash(password, 12)

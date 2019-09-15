@@ -13,7 +13,7 @@ const updatePassword = async (_, {email, password, _new}, {driver, user}) => {
   WHERE la.email = $email
   RETURN la`
   const {records: recs} = await ses.run(_1, {email})
-  H.assert (H.isNotEmpty (recs)) (`no user with that email`)
+  H.assert (H.isNotEmpty (recs)) (`no user with email ${email}`)
   H.assert (bcrypt.compare(password, recs[0].get (`hashedPassowrd`))) (`incorrect password`)
 
   /* Save new password */
