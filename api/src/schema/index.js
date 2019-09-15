@@ -15,20 +15,25 @@ export default {
       isAuthenticated: true,
       hasRole: true,
     },
-    query: {
-      exclude: [
-        // `AmosGame`,
-        `Response`,
-      ],
-    },
-    mutation: {
-      exclude: [
-        // `AmosGame`,
-        // `AmosGameVotes`,
-        // `Response`,
-        // `createTopic`,
-      ],
-    },
+    query: true,
+    // query: false,
+    // query: {
+    //   exclude: [
+    //     // `AmosGame`,
+    //     `Response`,
+    //   ],
+    // },
+    // mutation: true,
+    mutation: false,
+    // mutation: {
+    //   exclude: [
+    //     `Topic`,
+    //     // `AmosGame`,
+    //     // `AmosGameVotes`,
+    //     // `Response`,
+    //     // `createTopic`,
+    //   ],
+    // },
   },
 } |> makeAugmentedSchema
   |> applyDirectives

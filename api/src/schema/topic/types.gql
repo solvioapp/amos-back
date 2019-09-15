@@ -3,6 +3,7 @@ type Topic {
   name: String!
   children: [IS_PART_OF!]!
   parents: [IS_PART_OF!]!
+  amosGames: [FOR_TOPIC!]!
 }
 
 type IS_PART_OF @relation (name: "IS_PART_OF") {
@@ -16,7 +17,11 @@ input CreateTopicInput {
   parents: [String!]!
 }
 
+extend type Query {
+  autocomplete (string: String): String!
+}
+
 extend type Mutation {
-  # createTopic (input: CreateTopicInput!): Topic! @hasRole (roles: [admin])
-  createTopic (name: String!, children: [String!]!, parents: [String!]!): User! @hasRole (roles: [admin])
+  addTopic (input: CreateTopicInput!): Topic! @hasRole (roles: [admin])
+  # addTopic (name: String!, children: [String!]!, parents: [String!]!): User! @hasRole (roles: [admin])
 }

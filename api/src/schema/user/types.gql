@@ -4,14 +4,19 @@ enum Role {
 }
 
 type User {
-  id: ID!
-  email: String!
+  username: String!
   createdAt: DateTime!
-  votes: [VOTED_BY!]!
+  votes: [VOTED_ON!]!
+}
+
+type VOTED_ON @relation(name: "VOTED_ON") {
+  from: User!
+  to: AmosGame!
+  timestamp: DateTime!
 }
 
 extend type Query {
-  login (email: String!, password: String!): String!
+  login (usernameOrEmail: String!, password: String!): String!
   currentUser (name: String): String
   users: [User!] @hasRole (roles: [admin])
     @cypher(
@@ -20,6 +25,6 @@ extend type Query {
 }
 
 extend type Mutation {
-  signup (email: String!, password: String!): String!
+  signup (username: String!, email: String!, password: String!): String!
   updatePassword (email: String!, password: String!, _new: String!): String!
 }
