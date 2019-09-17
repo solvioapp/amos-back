@@ -13,7 +13,7 @@
     "start:dev": "npx nodemon -e js,gql,json --exec npx babel-node src/index.js",
     "build": "rm -rf build && npx babel src -d build --copy-files",
     "seedDb": "npx babel-node src/seed/seed-db.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jest"
   },
   "dependencies": {
     "apollo-server": "^2.9.3",
@@ -41,10 +41,12 @@
     "@babel/plugin-proposal-pipeline-operator": "^7.5.0",
     "@babel/plugin-proposal-throw-expressions": "^7.2.0",
     "@babel/preset-env": "^7.6.0",
+    "apollo-server-testing": "^2.9.3",
     "babel-eslint": "^11.0.0-beta.0",
     "babel-plugin-require-context-hook": "^1.0.0",
     "eslint": "^6.3.0",
     "husky": "^3.0.5",
+    "jest": "^24.9.0",
     "nodemon": "^1.19.2"
   },
   "optionalDependencies": {

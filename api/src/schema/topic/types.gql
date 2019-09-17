@@ -4,6 +4,7 @@ type Topic {
   children: [IS_PART_OF!]!
   parents: [IS_PART_OF!]!
   amosGames: [FOR_TOPIC!]!
+  # top
 }
 
 type IS_PART_OF @relation (name: "IS_PART_OF") {
@@ -24,7 +25,7 @@ type Path {
 extend type Query {
   autocomplete (name: String!): [Path!]!
   getChildrenRec (name: String!, level: Int!): [Path!]!
-  # search (name: String!): 
+  # search (topic: Topic!): [Resource!]!
   getMostCommonPrerequisites (name: String!): [String!]!
 }
 

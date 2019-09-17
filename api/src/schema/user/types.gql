@@ -13,7 +13,8 @@ type User {
   proficiencies: [PROFICIENCY!]!
 
   # Functions
-  discover: [Topic!]!
+  discover: [Resource!]!
+  search (topic: String!): [Resource!]!
 }
 
 type VOTED_ON @relation(name: "VOTED_ON") {
